@@ -1,4 +1,4 @@
-Lab-1 Overview
+Lab-1 overview
 
 In this lab you will
 
