@@ -1,13 +1,12 @@
 // Patrick Temple
 // Prof. Whitener
 // CSCI165
-// 26 January 2020
+// 31 January 2020 - REVISED
 
 // Lab 1: Shape Maker.
 // Purpose: makes specific shapes.
 
 import java.util.Scanner; // for getting number of rows for right triangle
-
 public class Shapes {
 
     public static void main(String[] args) {
@@ -19,14 +18,14 @@ public class Shapes {
         int triangleRows = Integer.parseInt(reader.nextLine());
         System.out.println("Triangle with " + triangleRows + " rows:\n\n");
         
-        //for loop: triangle
-        for(int i = triangleRows; i >= 1; i--)
+        // making a nested loop for the triangle
+        for(int i = triangleRows; i >= 1; i--) // adds rows in the triangle
         {
             for(int numOfStarsInRow = i; numOfStarsInRow >= 1; numOfStarsInRow--)
             {
-                System.out.print("*");
+                System.out.print("*"); // fill rows with asterisks
             }
-            System.out.print("\n");
+            System.out.print("\n"); // move to the next line
         }
         
         System.out.println("\nRectangle:"); // make the rectangle
@@ -43,6 +42,8 @@ public class Shapes {
         System.out.println("  * *  ");
         System.out.println(" * * * ");
         System.out.println("*******");
-    }
 
+	reader.close(); // close Scanner object to prevent
+	                // a warning or a resource leak
+    }
 }
