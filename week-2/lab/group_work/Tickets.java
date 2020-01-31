@@ -1,3 +1,18 @@
+// Kaiya Hogg and Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 31 January 2019
+
+// Week 2 Lab: Tickets
+// Purpose: to validate tickets with a special algorithm
+
+// Classes
+import java.util.Scanner;             // for reading the list of incoming tickets
+import java.io.FileWriter;            // to write to the valid_tix.txt file
+import java.io.IOException;           // for problems writing to a file
+import java.io.File;                  // for the object type File
+import java.io.FileNotFoundException; // for when the text file does not exist
+
 public class Tickets{
 
     public static void main(String[] args){
@@ -28,15 +43,64 @@ public class Tickets{
             Submit only Java source code files. Also submit valid_tix.txt   
 
         */
-
-        String  ticket  = "123454";                            
-        String  last = ticket.substring(ticket.length() - 1);                                                   
-        int     last_digit = Integer.valueOf(last);
-        String  reduced_ticket = ticket.substring(0, ticket.length() - 1);
-        int     ticket_number = Integer.valueOf(reduced_ticket);
-        int     remainder = ticket_number % 7; 
-        boolean validity = remainder == last_digit; 
-        String  format = "Original Ticket #: %s\nLast Digit: %d\nReduced Ticket #: %d\nRemainder: %d\nValidity: %b\n";
-        System.out.printf(format, ticket, last_digit, ticket_number, remainder, validity);  
+        
+        
+        
+        try {
+                // file variables
+                File ticketFile = new File("tickets.txt"); // the tickets to be validated
+                Scanner checker = new Scanner(ticketFile); // the Scanner that reads tickets.txt
+                FileWriter validTix = new FileWriter("valid_tix.txt"); // valid tickets are piped to this file
+                                
+                // variables used in preparing outputs and results
+                String ticket;            // the original ticket number
+                String last;              // the last digit of ticket
+                int last_digit = 0;       // the variable 'last' as an integer 
+                String reduced_ticket;    // the ticket without the last digit
+                int ticket_number = 0;    // the reduced ticket as an integer
+                int remainder = 0;        // calculated remainder from ticket_number % 7
+                boolean validity = false; // indicates if the last digit equals the remainder
+                String  format = "Original Ticket #: %s\nLast Digit: %d\nReduced Ticket #: %d\nRemainder: %d\nValidity: %b\n";
+                
+                int totalTixCounter = 0; // counts total tickets processed
+                int validTixCounter = 0; // counts the valid tickets saved into valid_tix.txt
+                
+                // process validity of tickets until the all of tickets.txt has been checked
+                while (checker.hasNext()) {
+                    ticket = checker.nextLine();                               // get the ticket number from the provided tickets
+                    last = ticket.substring(ticket.length() - 1);              // get the last number and make...
+                    last_digit = Integer.valueOf(last);                        // that into a string and an integer
+                    reduced_ticket = ticket.substring(0, ticket.length() - 1); // get everything but the last number in the...
+                    ticket_number = Integer.valueOf(reduced_ticket);           // ticket and put it into a string and an integer
+                    remainder = ticket_number % 7;                             // calculate the remainder of the ticket
+                    validity = (remainder == last_digit);                      // return true if the remainder is equal to the last...
+                                                                               // digit of the ticket
+                    
+                    System.out.printf(format, ticket, last_digit, ticket_number, remainder, validity); // print ticket statuses
+                    
+                    if(validity == true) { // if remainder = last digit
+                        validTix.write(ticket + '\n'); // save it to the text file and go to next line
+                        validTixCounter++;             // add to valid ticket counter
+                    }
+                    
+                    totalTixCounter++; // add to total tickets processed
+                }
+                
+                // print out numbers for number of tickets processed and number correct
+                System.out.println("Of the " + totalTixCounter + " tickets processed, " + validTixCounter + " are valid.");
+                
+                // close Scanners and FileWriters
+                checker.close();  // close the input file stream
+                validTix.close(); // close the output file stream
+        }
+        
+        catch (FileNotFoundException e) { // file not found
+            System.out.println("ERROR: File not found.");
+        }
+        
+        catch (IOException e) { // cannot write a file
+            System.out.println("ERROR: File writing problem occured.");
+        }
     }
 }
+
