@@ -8,19 +8,21 @@
 // and last name (as a single string) by
 // using string methods
 
-import java.lang.String;  // library for dealing with strings
-import java.util.Scanner; // library for reading input
+import java.lang.String;        // class for dealing with strings
+import java.util.Scanner;       // class for reading input
+import java.lang.StringBuilder; // used for concatenating strings
 
 public class Initials {
 	public static void main(String args[]) {
 		
 		Scanner reader = new Scanner(System.in); // Scanner object
 
-		String name = "";        // the name about to be taken in
-		int spaceHere = 0;       // where the space falls in the name
-		char firstInitial = ' '; // first initial and last initials ... 
-		char lastInitial = ' ';  // are saved into their own char variables
-
+		String name = "";           // the name about to be taken in
+		int    spaceHere    = 0;    // where the space falls in the name
+		char   firstInitial = ' ';  // first initial and last initials ... 
+		char   lastInitial  = ' ';  // are saved into their own char variables
+		String bothInitials = "";   // string where both initials are held
+		
 		// get the name
 		System.out.print("Type your first and last name, then press Enter: ");
 		name = reader.nextLine();
@@ -32,16 +34,19 @@ public class Initials {
 
 		// convert initials to number by casting
 		int firstAsNumber = (int)firstInitial;   // first letter as numerical ASCII value
-                int lastAsNumber = (int)lastInitial;    // last letter as numerical ASCII value
+        int lastAsNumber = (int)lastInitial;    // last letter as numerical ASCII value
 		int initialSum = firstAsNumber + lastAsNumber;
-
+		
+		// concatenate strings together ( using https://stackoverflow.com/a/328253 )
+		bothInitials = new StringBuilder().append(firstInitial).append(lastInitial).toString();
+		
+		// print all information
 		System.out.println("First initial's ASCII number: " + firstAsNumber + ", last initial's ASCII number: " + lastAsNumber);
 		System.out.println("Both initial's ASCII numbers combined: " + initialSum);
+		System.out.println("Initials together as a string: " + bothInitials);
 
 		// close Scanner objects
 		reader.close();
 	}
 }
 
-// Ken: How am I doing with comments/styling? I looked up Oracle's
-// Style Guide, and I adapted my code on that slightly.
