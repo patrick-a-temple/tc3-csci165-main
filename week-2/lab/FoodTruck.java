@@ -2,6 +2,8 @@
 // Prof. Whitener
 // CSCI165
 // 7 February 2020
+// Revision 1 - eliminates an unused class
+// and variable that throw a warning
 
 // LAB 2 (indiv. assignment): FoodTruck
 // Purpose: to process an order at a food truck
@@ -17,7 +19,6 @@ import java.io.IOException;                // have an exit in case files cannot 
 import java.time.format.DateTimeFormatter; // for formatting the time
 import java.time.LocalDateTime;            // for getting the current time
 import java.lang.StringBuilder;            // for concatenating strings
-import java.text.DecimalFormat;            // for formatting decimals
 
 public class FoodTruck {
     public static void main(String[] args) {
@@ -148,8 +149,6 @@ public class FoodTruck {
             }
             // calculate subtotal
             double salesTaxAdded = SALES_TAX * subtotal;
-            DecimalFormat totalStyle = new DecimalFormat("$###,###.##"); // TODO
-            // StringBuffer ** START HERE **
 
             double total = (1 + SALES_TAX) * subtotal;
 
