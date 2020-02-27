@@ -18,6 +18,8 @@ public class Radio{
     // constructors: define various ways for instances to be created
     public Radio(){} // no argument constructor
 
+    // having multiple arguments in a constructor
+    // is called overloading
     public Radio(Band band){
         setBand(band);
     }
