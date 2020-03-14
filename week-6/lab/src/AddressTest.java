@@ -6,6 +6,8 @@
 // Week 6 Lab: AddressTest
 // Purpose: to test the Address class
 
+// had trouble here: null pointer exceptions
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;

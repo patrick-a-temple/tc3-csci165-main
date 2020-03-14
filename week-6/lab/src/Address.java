@@ -7,6 +7,8 @@
 // Purpose: to define address class
 // All data is already protected
 
+// had trouble here: null pointer exceptions
+
 // imported Java classes
 import java.util.Scanner;
 
@@ -20,10 +22,17 @@ public class Address {
 	private String city;
 	private String state;
 	private String zip;
-	
+	private static ZIPData zData;
+	private static String[][] zipData = new String[43000][3];
+	//private static 
 	// object that holds all zip codes
 	// from a CSV file
-	private String[][] zipData = new String[43000][3];
+	
+	static {
+		zipData = zData.getData(); // causes a Null Pointer Exception error
+		                           // that I was unsure how to fix, due to my
+		                           // modifications to prevent memory overloads
+	}
 	
 	
 	// blank constructor
@@ -31,7 +40,7 @@ public class Address {
 	
 	public Address(String loadStreet, String loadZip) {
 		
-		zipData = fillZipData(); // fill zip code data
+		//zipData = fillZipData(); // fill zip code data
 		setStreet(loadStreet);   // load the street
 		
 		// query the zip code list, and get the
@@ -55,7 +64,7 @@ public class Address {
 	}
 	
 	// get info for cities and zips
-	private String[][] fillZipData() {
+	/*private String[][] fillZipData() {
 		
 		String[][] data = new String[43000][3];
 		
@@ -69,7 +78,9 @@ public class Address {
 			// so the function cannot
 			String     dummy   = reader.nextLine();
 			
-			
+			// the method below appears to be inefficient
+			// when getting many zips at a time, and under
+			// high stress, the program crashes
 			for(int i = 0; reader.hasNext(); i++) {
 				
 				String   currentLine = reader.nextLine();
@@ -126,9 +137,9 @@ public class Address {
 						currentIndex++;
 					}
 					
-					/*else if(splitLine[currentIndex].isBlank()) {
+					else if(splitLine[currentIndex].isBlank()) {
 						currentIndex += 2;
-					}*/
+					}
 					
 					else {
 						currentIndex++;
@@ -154,7 +165,7 @@ public class Address {
 		}
 
 		return data;
-	}
+	}*/
 	
 	private String[] lookupTownAndState(String zip) {
 		
