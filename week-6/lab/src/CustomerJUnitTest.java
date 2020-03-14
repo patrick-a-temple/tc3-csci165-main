@@ -1,3 +1,11 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: CustomerJUnitTest
+// Purpose: to put Customer object to the test
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -13,17 +21,16 @@ class CustomerJUnitTest {
 		
 		String expectedFName   = "Bruce";
 		String expectedLName   = "Davis";
-		//String expectedAddress = "123 US Route 56";
-		//String expectedZip     = "67567";
-		//String expectedCity    = "Pawnee Rock";
-		//String expectedState   = "KS";
+		
 		String expectedEmail   = "bdavis@gmail.com";
 		
 		assertEquals(expectedFName, bruce.getFirstName());
 		assertEquals(expectedLName, bruce.getLastName());
-		assertNotEquals("None on File", bruce.getEmail());
+		assertNotEquals("None on File", bruce.getEmail()); // check data validation
+		                                                   // that occured in emailIsValid
 		assertEquals(expectedEmail, bruce.getEmail());
 		
+		// check address is correct
 		Address expectedAddress = new Address("123 US Route 56", "67567");
 		assertTrue(street.equals(expectedAddress));
 		
@@ -80,15 +87,17 @@ class CustomerJUnitTest {
 	void testEqualsCustomer() {
 		
 		// same address - Philidelphia Phillies
-		// stadium, other address
+		// stadium
 		Address citizensBankStad = new Address("1 Citizens Bank Way", "19148");
+		
+		// Boston MA: Fenway Park
 		Address fenwayPark       = new Address("4 Jersey Street", "02215");
 		
 		Customer phanaticCloneA = new Customer("Phillie", "Phanatic",
 				                      "phan@phillies.com", citizensBankStad);
-		Customer phanaticCloneB = new Customer("Phillie", "Phanatic",
-                                      "phan@phillies.com", citizensBankStad);
+		Customer phanaticCloneB = new Customer(phanaticCloneA);
 		
+		// Boston MA: Fenway Park
 		Customer wally          = new Customer("Wally", "Green Monster",
 				                      "w.g.monster@redsox.com", fenwayPark);
 		
@@ -104,6 +113,7 @@ class CustomerJUnitTest {
 	@Test
 	void testToString() {
 		
+		// test toString function
 		Address testAddress = new Address("642 Main Street", "02537");
 		Customer testCustomer = new Customer("Kyle", "Delhi", 
 											"kdelhi@hotmail.com", testAddress);

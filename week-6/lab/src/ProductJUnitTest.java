@@ -1,3 +1,11 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 and 7 Lab: ProductJUnitTest
+// Purpose: to test Product
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -53,11 +61,12 @@ class ProductJUnitTest {
 		String expectedPName = "Bran Flakes";
 		String expectedPDesc = "Bold new taste!";
 		double expectedPrice = 2.50;
+		String expectedSKU   = "0041234567";
 		
 		assertEquals(expectedPName, tester.getName());
 		assertEquals(expectedPDesc, tester.getDescription());
 		assertEquals(expectedPrice, tester.getPrice());
-		assertEquals(expectedPrice, tester.getPrice());
+		assertEquals(expectedSKU, tester.getSKU()); // new
 		
 	}
 
@@ -105,7 +114,7 @@ class ProductJUnitTest {
 	void testEqualsProduct() {
 		
 		Product twinA = new Product("Water Bottle", "Stay hydrated", 1.49, "1104567890");
-		Product twinB = new Product("Water Bottle", "Stay hydrated", 1.49, "1104567890");
+		Product twinB = new Product(twinA); // clone product
 		
 		Product somethingElse = new Product("Soda-Soula", "1 Liter of Cola",
 											2.00, "0014567890");

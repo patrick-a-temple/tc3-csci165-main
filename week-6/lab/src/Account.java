@@ -1,3 +1,11 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: Account
+// Purpose: to define the account class.
+// Altered for data privacy
 
 public class Account {
 	
@@ -15,31 +23,37 @@ public class Account {
 	// customer ID and customer object only
 	public Account(int id, Customer customer) {
 		
+		// set customer and account id
 		setAccountID(id);
-		setCustomer(customer);
+		setCustomer(new Customer(customer));
 		
 	}
 	
+	// full constructor
 	public Account(int id, Customer customer,
 					double balance, double creditLimit,
 					Date date, double discountLevel) {
 		
+		// set all fields inside the
+		// constructor
 		setAccountID(id);
-		setCustomer(customer);
+		setCustomer(new Customer(customer)); // make a copy of Customer obj
+		                                     // to prevent leaks
 		setBalance(balance);
 		setCreditLimit(creditLimit);
-		setDateCreated(date);
+		setDateCreated(new Date(date));      // make a copy of Date obj too
 		setDiscountLevel(discountLevel);
 		
 	}
 	
+	// copy constructor
 	public Account(Account otherAccount) {
 		
 		this.accountID     = otherAccount.accountID;
-		this.customer      = otherAccount.customer;
+		this.customer      = new Customer(otherAccount.customer);
 		this.balance       = otherAccount.balance;
 		this.creditLimit   = otherAccount.creditLimit;
-		this.dateCreated   = otherAccount.dateCreated;
+		this.dateCreated   = new Date(otherAccount.dateCreated);
 		this.discountLevel = otherAccount.discountLevel;
 		
 	}
@@ -67,7 +81,9 @@ public class Account {
 	}
 	
 	public void setCustomer(Customer customer) {
-		this.customer = customer;
+		
+		this.customer = new Customer(customer); // return a copied version of Customer
+		                                        // object to prevent a leak
 	}
 
 	public double getCreditLimit() {
@@ -92,11 +108,11 @@ public class Account {
 	}
 
 	public Customer getCustomer() {
-		return customer;
+		return new Customer(this.customer);
 	}
 
 	public void setDateCreated(Date dateCreated) {
-		this.dateCreated = dateCreated;
+		this.dateCreated = new Date(dateCreated);
 	}
 	
 	public double getDiscountLevel() {

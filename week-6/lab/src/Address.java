@@ -5,6 +5,7 @@
 
 // Week 6 and 7 Lab: Address
 // Purpose: to define address class
+// All data is already protected
 
 // imported Java classes
 import java.util.Scanner;

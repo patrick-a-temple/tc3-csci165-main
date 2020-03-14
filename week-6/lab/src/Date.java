@@ -1,3 +1,16 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: Date
+// Purpose: to define the date class
+
+// CREDIT:
+// This code is from the code folder
+// from the instructor's repository,
+// with his approval
+
 public class Date{
 
     // Class Level Instance Variables

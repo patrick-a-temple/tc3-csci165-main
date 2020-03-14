@@ -1,3 +1,11 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: AccountJUnitTest
+// Purpose: to do tests on Account class
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
@@ -121,6 +129,7 @@ class AccountJUnitTest {
 	@Test
 	void testCompareTo() {
 		
+		// accounts tested
 		Date     kAcctCreated = new Date(1, 1, 2020);
 		Address  kellyAddress = new Address("11 Davis Road", "14850");
 		Customer kellyB       = new Customer("Kelly", "Blue", "k.blue@yahoo.com", kellyAddress);
@@ -133,12 +142,14 @@ class AccountJUnitTest {
 		Account  hjAccount     = new Account(5555, haroldJ, 1000.00, 1750.00,
 				                             hAcctCreated, 0.10);
 		
-		assertTrue(kbAccount.compareTo(hjAccount) == -1);
-		assertTrue(hjAccount.compareTo(kbAccount) == 1);
+		assertTrue(kbAccount.compareTo(hjAccount) == -1); // test if Kelly has lower
+		                                                  // account number
+		assertTrue(hjAccount.compareTo(kbAccount) == 1);  // test if Harold has a higher
+		                                                  // account number
 		
-		Account haroldClone = new Account(kbAccount);
+		Account haroldClone = new Account(kbAccount); // make a cloned Harold
 		
-		assertTrue(haroldClone.compareTo(kbAccount) == 0);
+		assertTrue(haroldClone.compareTo(kbAccount) == 0); // test equal objects
 		
 		
 	}
@@ -146,25 +157,26 @@ class AccountJUnitTest {
 	@Test
 	void testEqualsAccount() {
 		
+		// objects to test with
 		Date     rexSignup  = new Date(1, 1, 2015);
 		Address  rexAddress = new Address("101 Dalmation Alley", "14877");
 		Customer rex        = new Customer("Rex", "The Dog",
 				                           "rex.in.rexville@chewy.com", rexAddress);
 		Account  rexAccount = new Account(9484, rex, 300.00, 500.00,
-				                         rexSignup, 0.10);
+				                          rexSignup, 0.10);
 		
 		Date     garySignup   = new Date(1, 1, 2020);
 		Address  garyAddresss = new Address("123 Main Street", "38329");
 		Customer garyCustomer = new Customer("Gary", "Melvin",
 									"gmelvin77@yahoo.com", garyAddresss);
 		Account  garyAccount  = new Account(9876, garyCustomer, 1500.00,
-				                    2500.00, garySignup, 0.00);
+				                            2500.00, garySignup, 0.00);
 		
-		Account  rexClone     = new Account(rexAccount);
+		Account  rexClone     = new Account(rexAccount); // clone of Rex
 		
-		assertTrue(rexClone.equals(rexAccount));
-		assertFalse(rexAccount.equals(garyAccount));
-		assertFalse(garyAccount.equals(rexClone));
+		assertTrue(rexClone.equals(rexAccount));     // see if Rex's clone = Rex
+		assertFalse(rexAccount.equals(garyAccount)); // test other accounts to see
+		assertFalse(garyAccount.equals(rexClone));   // when accounts are not valid
 		
 		//fail("Not yet implemented");
 		
@@ -173,6 +185,7 @@ class AccountJUnitTest {
 	@Test
 	void testToString() {
 		
+		// test proper function of toString
 		Date     mbAcctDate = new Date(1, 1, 2018);
 		Address  corsairHQ  = new Address("47100 Bayside Pkwy.", "94538");
 		Customer mavisB     = new Customer("Mavis", "Beacon", "mbeacon@gmail.com", corsairHQ);

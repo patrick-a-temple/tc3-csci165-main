@@ -1,3 +1,16 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: DateTest
+// Purpose: Test Date class
+
+// CREDIT:
+// This file was originally inside
+// of the code folder of the instuctor's repo
+// and it said in the instructions to include this code
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;

@@ -5,6 +5,7 @@
 
 // Week 6 and 7 Lab: Product
 // Purpose: to define Product class
+// checked for privacy leaks
 
 public class Product {
 	

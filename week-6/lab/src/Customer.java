@@ -5,6 +5,7 @@
 
 // Week 6/7 Lab: Customer:
 // Purpose: to define the customer class
+// improved security added
 
 // imported classes
 import java.util.regex.Pattern;
@@ -21,6 +22,7 @@ public class Customer {
 	// constructors
 	public Customer() {  } // blank constructor
 	
+	
 	// complete constructor
 	public Customer(String fName, String lName,
 					String email, Address mAddress) {
@@ -28,14 +30,24 @@ public class Customer {
 		setFirstName(fName);
 		setLastName(lName);
 		setEmail(email);
-		setMailingAddress(mAddress);
+		setMailingAddress(new Address(mAddress));
 		
 	}
 	
+	// first and last name constructor
 	public Customer(String fName, String lName) {
 		
 		setFirstName(fName);
 		setLastName(lName);
+		
+	}
+	
+	public Customer(Customer otherCustomer) {
+		
+		this.firstName        = otherCustomer.firstName;
+		this.lastName         = otherCustomer.lastName;
+		this.email            = otherCustomer.email;
+		this.mailingAddress   = new Address(otherCustomer.getMailingAddress());
 		
 	}
 	
@@ -72,7 +84,7 @@ public class Customer {
 		
 	}
 	
-	// domain validation for setting email
+	// data validation for setting email
 	private boolean emailIsValid(String email) { 
 		
 		// method used adapted from
@@ -97,22 +109,24 @@ public class Customer {
 	}
 
 	public Address getMailingAddress() {
-		return mailingAddress;
+		return new Address(this.mailingAddress);
 	}
 
 	public void setMailingAddress(Address mailingAddress) {
-		this.mailingAddress = mailingAddress;
+		this.mailingAddress = new Address(mailingAddress);
 	}
 	
+	// test two Customers for equality
 	public boolean equals(Customer anotherCustomer) {
 		
-		return  this.firstName.equals(anotherCustomer.firstName) &&
-				this.lastName.equals(anotherCustomer.lastName)  &&
-				this.email.equals(anotherCustomer.email)        &&
+		return  this.firstName.equals(anotherCustomer.firstName)            &&
+				this.lastName.equals(anotherCustomer.lastName)              &&
+				this.email.equals(anotherCustomer.email)                    &&
 				this.mailingAddress.equals(anotherCustomer.mailingAddress);
 		
 	}
 	
+	// output customer as string
 	@Override
 	public String toString() {
 		

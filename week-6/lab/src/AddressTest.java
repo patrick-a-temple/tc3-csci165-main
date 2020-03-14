@@ -1,17 +1,24 @@
+// Patrick Temple
+// Prof. Whitener
+// CSCI165
+// 13 March 2020
+
+// Week 6 Lab: AddressTest
+// Purpose: to test the Address class
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
 class AddressTest {
 
-	/*@BeforeAll
-	static void setUpBeforeClass() throws Exception {
-	}*/
 
 	@Test
 	void testAddressStringString() {
 		
-		Address tester = new Address("26 Hulbert Hollow Road", "14883");
+		// make a test object and see if
+		// it reports back the same
+		Address tester = new Address("123 Main Street", "14883");
 		
 		String expectedAddress = "26 Hulbert Hollow Road";
 		String expectedTown    = "Spencer";
