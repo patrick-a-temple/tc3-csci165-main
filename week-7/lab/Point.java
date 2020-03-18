@@ -26,6 +26,7 @@ public class Point {
 		
 	}
 	
+	// copy contructor
 	public Point(Point otherPoint) {
 		
 		this.x = otherPoint.x;
@@ -51,6 +52,9 @@ public class Point {
 	}
 	
 	public int[] getXY() {
+		
+		// export the x and y coordinates
+		// into an int array
 		int[] result = new int[2];
 		
 		result[0] = this.x;
@@ -70,7 +74,7 @@ public class Point {
 	// to find the difference, we need to
 	// use the distance formula:
 	//  __________________________
-	// √((x2 - x1)²) = (y2 - y1)²)
+	// √((x2 - x1)²) + ((y2 - y1)²))
 	// more info:
 	// https://www.purplemath.com/modules/distform.htm
 	
@@ -116,7 +120,7 @@ public class Point {
 	public double distance() {
 		
 		// distance, but assuming from the origin
-		// (center) of the Cartesian plot
+		// (center) of the Cartesian plot [(0, 0)]
 		
 		double xSquaredDiff = Math.pow((0 - this.x), 2);
 		double ySquaredDiff = Math.pow((0 - this.y), 2);
@@ -131,6 +135,8 @@ public class Point {
 	
 	// methods with @Override before them
 	
+	// see if a point (or other object) is
+	// equal to another point
 	@Override
 	public boolean equals(Object otherObj) {
 		
@@ -141,6 +147,8 @@ public class Point {
 		if(otherObj == null)                    return false;
 		
 		// was otherObj once a Point?
+		// if statement read as: Does this Object
+		// appear to have been a Point at some time?
 		if(getClass() != otherObj.getClass())   return false;
 		
 		// copy otherObj into a Point variable so it
@@ -153,6 +161,7 @@ public class Point {
 		
 	}
 	
+	// print the point as a String
 	@Override
 	public String toString() {
 		
