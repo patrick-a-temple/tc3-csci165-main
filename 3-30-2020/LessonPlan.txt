@@ -1,5 +1,10 @@
-Lesson Plan:
+Quarantined Quorum
 
+Lesson Plan for Monday March 30 2020
+
+    Greetings and salutations . . . mic check (make sure boomer can share screen)
+    Review zyBook and assignments
+    Review new grading policy
     Inheritance and Composition ("is a" vs "has a")
     Understand that subclasses have multiple types
     Understand the subtle differences between instanceof and getClass
