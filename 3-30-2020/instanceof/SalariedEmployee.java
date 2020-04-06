@@ -36,13 +36,27 @@ public class SalariedEmployee extends Employee{
                 "\n$" + salary + " per year";
     }
 
-    public boolean equals(Object otherObject){
-        if (this == otherObject) return true;
-	    if (otherObject == null) return false;
-	    if (!(otherObject instanceof SalariedEmployee)) return false;
+    @Override
+public int hashCode() {
+	final int prime = 31;
+	int result = 1;
+	long temp;
+	temp = Double.doubleToLongBits(salary);
+	result = prime * result + (int) (temp ^ (temp >>> 32));
+	return result;
+}
 
-	    SalariedEmployee otherSalariedEmployee = (SalariedEmployee)otherObject;
-	         return super.equals(otherSalariedEmployee) &&
-	                salary == otherSalariedEmployee.salary;
-    }
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (!super.equals(obj))
+				return false;
+			if (getClass() != obj.getClass())
+				return false;
+			SalariedEmployee other = (SalariedEmployee) obj;
+			if (Double.doubleToLongBits(salary) != Double.doubleToLongBits(other.salary))
+				return false;
+			return true;
+		}
 }
