@@ -6,7 +6,7 @@ CSCI165
 So far, this readme file is serving as a place where the author is keeping information about concepts to construct further in the game. The requirement for two additional classes that implement Creature is described at the bottom. If I have time, I may implement these.
 
 Change Log:
-<DAY OF FIRST COMMIT>: Basic class structure, UML design
+2 May 2020: Basic class structure, UML design
 Soon: fully functional game
 
 This folder contains my final project for Computer Science II. It is a version of a cellular automaton that has two different types of characters: Hobbits and Nazgul.
