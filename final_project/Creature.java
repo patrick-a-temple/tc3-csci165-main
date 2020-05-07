@@ -12,10 +12,13 @@
 import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public abstract class Creature implements Comparable<Creature>{
 	
 	// class features
+	
+	protected enum direction { UP, RIGHT, DOWN, LEFT };
 	
 	// location based on a 100 * 100 map
 	// (actual window will be 500 * 500)
@@ -25,18 +28,23 @@ public abstract class Creature implements Comparable<Creature>{
 	protected ArrayList<Item> inventory = new ArrayList<Item>(); // a list of all items a Creature has
 	
 	// stats
-	protected int health;                 // HP for the Creature
-	protected int sustenance;             // consider as Hunger (Hobbit) or time
-	                                      // since a Nazgul has stabbed a Hobbit
-	protected int offense;                // attack stat for Creature that
-	                                      // determines how many HP a hit gives
-	                                      // the other type of Creature
-	protected int defense;                // how much of an attack a Creature can
-	                                      // repel
-	protected int radiusSize;             // radius a Creature can detect another
-	                                      // Creature inside of
-	protected int turnsSinceReproduction; // time since a Creature has reproduced
-	protected boolean canCheckGround;     // notes if Creature can check ground this turn
+	protected int health;                    // HP for the Creature
+	protected int sustenance;                // consider as Hunger (Hobbit) or time
+	                                         // since a Nazgul has stabbed a Hobbit
+	protected int offense;                   // attack stat for Creature that
+	                                         // determines how many HP a hit gives
+	                                         // the other type of Creature
+	protected int defense;                   // how much of an attack a Creature can
+	                                         // repel
+	protected int radiusSize;                // radius a Creature can detect another
+	                                         // Creature inside of
+	protected int turnsSinceReproduction;    // time since a Creature has reproduced
+	protected boolean canCheckGround = true; // notes if Creature can check ground this turn
+	
+	protected boolean canMoveUp;          // note the directions a Creature can move in
+	protected boolean canMoveRight;
+	protected boolean canMoveDown;
+	protected boolean canMoveLeft;
 	
 	
 	
@@ -83,7 +91,7 @@ public abstract class Creature implements Comparable<Creature>{
 	// returns a boolean value that determines
 	// if a Creature is dead
 	public boolean isDead() {
-		if(health >= 0) {
+		if(health <= 0) {
 			return true;
 		}
 		else {
@@ -97,12 +105,81 @@ public abstract class Creature implements Comparable<Creature>{
 		return canCheckGround;
 	}
 	
+	public void moveRandomDirection() {
+		
+		Random rng = new Random();
+		int roll = Math.abs(rng.nextInt() % 4) + 1;
+		direction way = direction.UP; // will tell move() what way to go
+		if(roll == 1) {
+			way = direction.UP;
+		}
+		if(roll == 2) {
+			way = direction.RIGHT;
+		}
+		if(roll == 3) {
+			way = direction.DOWN;
+		}
+		if(roll == 4) {
+			way = direction.LEFT;
+		}
+		
+		move(way);
+		
+	}
+	
+	// return a boolean array that symbolizes the spots one step ahead
+	// are full or empty in the following order:
+	// up, right, down, left
+	public void refreshDirectSpaces(ArrayList<Creature> neighborData) {
+		
+		this.canMoveUp = true;
+		this.canMoveRight = true;
+		this.canMoveDown = true;
+		this.canMoveLeft = true;
+		
+		int[] locationUp    = { this.location[0], (this.location[1] - 1) };
+		int[] locationRight = { (this.location[0] + 1), this.location[1] };
+		int[] locationDown  = { this.location[0], (this.location[1] + 1) };
+		int[] locationLeft  = { (this.location[0] - 1), this.location[1] };
+		
+		for(Creature c : neighborData) {
+			
+			// fluke scenerio response: skip this Creature
+			if(Arrays.equals(this.location, c.getLocation())) {
+				continue;
+			}
+			
+			// check if space directly above is occupied
+			if(Arrays.equals(locationUp, c.getLocation())) {
+				this.canMoveUp = false; // if it is occupied mark false
+			}
+			
+			// do the same with the space to
+			// the right of this Hobbit, as well
+			// as below and to the left
+			if(Arrays.equals(locationRight, c.getLocation())) {
+				this.canMoveRight = false;
+			}
+			
+			if(Arrays.equals(locationDown, c.getLocation())) {
+				this.canMoveDown = false;
+			}
+			
+			if(Arrays.equals(locationLeft, c.getLocation())) {
+				this.canMoveLeft = false;
+			}
+			
+		}
+		
+		
+	}
+	
 	// abstract functions defined in
 	// implemented classes
 	
 	public abstract void chooseAction(ArrayList<Creature> neighborData);
 	
-	public abstract void move();
+	public abstract void move(direction d);
 	
 	public abstract void attack(Creature victim);
 	
@@ -115,6 +192,8 @@ public abstract class Creature implements Comparable<Creature>{
 	public abstract void getItem(Item collectedItem);
 	
 	public abstract boolean canReplicate();
+	
+	public abstract Creature seekEnemy(ArrayList<Creature> neighborData);
 	
 	// overridden function: compare by location of
 	// map in a lexicograpical fashion

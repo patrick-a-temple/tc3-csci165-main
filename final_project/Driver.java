@@ -60,7 +60,7 @@ public class Driver {
 		
 		// call each function to prove 
 		// early polymorphism
-		for (Creature c : creatures) {
+		for(Creature c : creatures) {
 			c.chooseAction(neighbors);
 			c.move();
 			c.attack(c);

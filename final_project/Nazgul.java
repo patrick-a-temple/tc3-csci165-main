@@ -22,6 +22,8 @@ public class Nazgul extends Creature {
 		this.radiusSize = 2;
 	}
 	
+	// TODO Add a copy constructor to be used in replicate()
+	
 	private void setVictimLocation(int[] vLocation) {
 		this.victimLocation = vLocation;
 	}
@@ -37,7 +39,7 @@ public class Nazgul extends Creature {
 	}
 	
 	@Override
-	public void move() {
+	public void move(direction d) {
 		System.out.println("A Nazgul is attempting to move");
 	}
 
@@ -93,6 +95,12 @@ public class Nazgul extends Creature {
 		 * it cannot use NOURISHMENT type items, nor can
 		 * it use a REACH item as it can attack a Hobbit from
 		 * anywhere inside of its radius.                     */
+	}
+	
+	@Override
+	public Creature seekEnemy(ArrayList<Creature> neighborData) {
+		// TODO Fill this function up
+		return null;
 	}
 
 	@Override
