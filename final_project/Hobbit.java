@@ -47,8 +47,10 @@ public class Hobbit extends Creature {
 		// to Stephen W for due to some buggy code,
 		// and he helped me rework it
 		
-		// see if the Hobbit can move in a specific
-		// direction - call checkDirectSpaces
+		// in case this Hobbit was not able to pick up
+		// items on the last turn, make it true again
+		this.canCheckGround = true;
+		
 		
 		// refresh this Hobbit's direct spaces
 		// (ie. one space up/down/left/right)
@@ -56,11 +58,14 @@ public class Hobbit extends Creature {
 		refreshDirectSpaces(neighborData);
 		
 		// if enemy nearby call attack()
+		
 		Creature firstEnemyFound = seekEnemy(neighborData);
 
 		if(firstEnemyFound != null) {
 			attack(firstEnemyFound);
-			// calls to stay need to be in the session
+			this.canCheckGround = false; // rule: if any Creature attacks,
+			                             // it cannot pick up an item
+			// rule: Hobbits cannot move after attacking
 		}
 
 		// if the Hobbit can move at all
@@ -204,6 +209,7 @@ public class Hobbit extends Creature {
 		
 		else {
 			System.out.println("A Hobbit cannot move as it blocked in");
+			this.canCheckGround = false;
 		}
 	}
 	
@@ -268,8 +274,7 @@ public class Hobbit extends Creature {
 		Random rng = new Random();
 
 		// "roll the dice" for a critical hit
-		// if it's a 6, it's a critical hit and
-		// the Hobbit can deal double damage and
+		// if it's a 6, if so, deal double damage and
 		// ignore the Nazgul's defenses
 		int diceRoll = Math.abs(rng.nextInt() % 6) + 1;
 		int damage = 0;
@@ -286,12 +291,14 @@ public class Hobbit extends Creature {
 			victim.alterHealth(damage);
 		}
 		
+		
 	}
 	
 	@Override
 	public Creature replicate() {
 		
-		int reproduceHere[] = { 50, 50 };
+		int reproduceHere[] = { 0, 0 }; // filler location,
+		                                // resulting baby should not be here
 		
 		// find a place to put the baby within bounds of the map
 		if(canMoveUp && this.location[0] > 0) {
@@ -315,6 +322,7 @@ public class Hobbit extends Creature {
 		                                               // Hobbit as the "parent"/"copied" Hobbit
 		
 		this.health--;
+		this.turnsSinceReproduction = 0;
 		return baby;
 	}
 	
@@ -379,7 +387,7 @@ public class Hobbit extends Creature {
 	@Override
 	public Creature seekEnemy(ArrayList<Creature> neighborData) {
 		
-		
+		// this is done assuming Map has returned 
 		// based on the reach value, decide if there
 		// is a Creature that can be attacked
 		
@@ -407,8 +415,17 @@ public class Hobbit extends Creature {
 	
 	@Override
 	public boolean canReplicate() {
+		// rule: allow reproduction only if this Hobbit meets
+		// the requirements below, aka. is it healthy?
 		if(this.sustenance >= 3 && this.health >= 4 && this.turnsSinceReproduction > 3) {
-			return true;
+			// is there space to put the baby?
+			if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {
+				return true;
+			}
+			else {
+				return false;
+			}
+			
 		}
 		else {
 			return false;

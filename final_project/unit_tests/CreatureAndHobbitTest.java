@@ -134,7 +134,7 @@ class CreatureAndHobbitTest {
 		int[] upper = { 50, 0 } ;
 		int[] left  = { 0, 50 } ;
 		int[] lower = { 50, 99 };
-		int[] right = { 99, 50};
+		int[] right = { 99, 50 };
 		
 		// test that it can get to the the other end
 		// of a map if at another end
