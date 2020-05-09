@@ -138,7 +138,6 @@ public class Hobbit extends Creature {
 					if(Nazgul.class.isInstance(c)) {
 						foeCount++;
 						foeUp = true;
-						System.out.printf("Enemy above at (%d, %d)%n", tempLocation[0], tempLocation[1]);
 						break;
 					}
 					if(Hobbit.class.isInstance(c)) {
@@ -165,26 +164,21 @@ public class Hobbit extends Creature {
 			// or if it sees Nazgul in all directions, pick a random direction
 			if((friendCount == 0 && foeCount == 0) || foeCount == 4) {
 				moveRandomDirection();
-				System.out.println("Moving randomly...");
 				return;
 			}
 			
 			// if a Hobbit has a Nazgul directly behind it
 			if(foeCount > 0) {
 				if(canMoveDown && foeUp) {
-					System.out.println("Danger, moving down");
 					move(direction.DOWN);
 				}
 				else if(canMoveLeft && foeRight) {
-					System.out.println("Danger, moving left");
 					move(direction.LEFT);
 				}
 				else if(canMoveUp && foeDown) {
-					System.out.println("Danger, moving up");
 					move(direction.UP);
 				}
 				else if(canMoveRight && foeLeft) {
-					System.out.println("Danger, moving right");
 					move(direction.RIGHT);
 				}
 				return;
@@ -208,14 +202,12 @@ public class Hobbit extends Creature {
 		} // end else if(can move in at least one direction)
 		
 		else {
-			System.out.println("A Hobbit cannot move as it blocked in");
 			this.canCheckGround = false;
 		}
 	}
 	
 	@Override
 	public void move(direction d) {
-		System.out.println("A hobbit is moving");
 		
 		if(d == direction.UP) {
 			
@@ -269,7 +261,6 @@ public class Hobbit extends Creature {
 
 	@Override
 	public void attack(Creature victim) {
-		System.out.println("A hobbit is attempting to attack a Nazgul");
 
 		Random rng = new Random();
 
@@ -331,7 +322,6 @@ public class Hobbit extends Creature {
 	// it goes below zero sustenance
 	@Override
 	public void stay() {
-		System.out.println("A hobbit is staying");
 		sustenance--; // decrement sustenance
 		turnsSinceReproduction++;
 		
@@ -345,7 +335,6 @@ public class Hobbit extends Creature {
 	
 	@Override
 	public Color color() {
-		System.out.println("A hobbit is changing color");
 		if(this.sustenance >= 4) {
 			return Color.GREEN;
 		}
@@ -359,7 +348,6 @@ public class Hobbit extends Creature {
 	
 	@Override
 	public void getItem(Item collectedItem) {
-		System.out.println("A Hobbit is getting an item");
 		Item.itemType ciType = collectedItem.getCurrentItemType();
 		int modRate = collectedItem.getModifyingRate();
 		if(ciType == Item.itemType.HEALTH) {

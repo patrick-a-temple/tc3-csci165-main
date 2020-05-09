@@ -159,7 +159,7 @@ public class Nazgul extends Creature {
 			// skip if it finds the the victim
 			// or this Nazgul
 			if(Arrays.equals(this.victimLocation, c.getLocation()) ||
-					Arrays.equals(this.location, c.getLocation())) {
+				Arrays.equals(this.location, c.getLocation())) {
 				continue;
 			}
 			
@@ -459,7 +459,6 @@ public class Nazgul extends Creature {
 
 	@Override
 	public Color color() {
-		System.out.println("A Nazgul is changing colors");
 		if(this.sustenance >= 4) {
 			return Color.BLACK;
 		}
