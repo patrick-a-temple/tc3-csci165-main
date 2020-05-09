@@ -20,7 +20,6 @@ public class Map {
 	
 	public Map() { /* blank constructor */ }
 	
-	
 	// overloaded constructor
 	public Map(ArrayList<Creature> occupants, ArrayList<Item> items) {
 		this.occupants = occupants;
@@ -28,6 +27,7 @@ public class Map {
 	}
 	
 	// see if a space is occupied by a Creature
+	// (not an Item, that has its own function)
 	public boolean isSpaceOccupied(int[] location) {
 		
 		for(int i = 0; i < occupants.size(); i++) {
@@ -108,6 +108,23 @@ public class Map {
 		
 		return results;
 		
+	}
+	
+	// remove dead Creatures
+	public void removeDeadCreatures() {
+		
+		int index = 0;
+		while(index < occupants.size()) {
+			
+			Creature temp = occupants.get(index);
+			if(temp.isDead()) {
+				occupants.remove(temp);
+			}
+			else {
+				index++;
+			}
+			
+		}
 	}
 	
 }

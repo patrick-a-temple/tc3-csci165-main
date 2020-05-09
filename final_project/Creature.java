@@ -75,6 +75,10 @@ public abstract class Creature implements Comparable<Creature>{
 		return defense;
 	}
 	
+	public int getRadiusSize() {
+		return radiusSize;
+	}
+	
 	// subtract health as the result of an
 	// attack (use negative value if other Creature is
 	// trying to heal this Creature)
