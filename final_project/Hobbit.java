@@ -47,6 +47,13 @@ public class Hobbit extends Creature {
 		// to Stephen W for due to some buggy code,
 		// and he helped me rework it
 		
+		// do not allow this Hobbit to move if it is dead
+		if(this.isDead()) {
+			System.out.println("This Hobbit is dead and cannot move");
+			canCheckGround = false;
+			return;
+		}
+		
 		// in case this Hobbit was not able to pick up
 		// items on the last turn, make it true again
 		this.canCheckGround = true;
@@ -403,9 +410,18 @@ public class Hobbit extends Creature {
 	
 	@Override
 	public boolean canReplicate() {
+		
+		// do not allow reproduction if next to a wall
+		if(this.location[0] == 0 || this.location[0] == 99) {
+			return false;
+		}
+		else if(this.location[1] == 0 || this.location[1] == 99) {
+			return false;
+		}
+		
 		// rule: allow reproduction only if this Hobbit meets
 		// the requirements below, aka. is it healthy?
-		if(this.sustenance >= 3 && this.health >= 4 && this.turnsSinceReproduction > 3) {
+		else if(this.sustenance >= 3 && this.health >= 4 && this.turnsSinceReproduction > 3) {
 			// is there space to put the baby?
 			if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {
 				return true;
@@ -420,6 +436,7 @@ public class Hobbit extends Creature {
 		}
 	}
 	
+	// return reach
 	public int getReach() {
 		return this.reach;
 	}

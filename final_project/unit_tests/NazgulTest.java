@@ -228,7 +228,7 @@ class NazgulTest {
 	}
 	
 	
-	// test the bahaviors of stay
+	// test the behaviors of stay
 	@Test
 	void testStay() {
 		
@@ -352,6 +352,40 @@ class NazgulTest {
 		assertFalse(ill.canReplicate());
 		assertFalse(young.canReplicate());
 		assertFalse(rightBlocker.canReplicate());
+		assertFalse(blocked.canReplicate());
+		
+	}
+	
+	@Test
+	void testCanReplicateAgainstWall() {
+		
+		ArrayList<Creature> world = new ArrayList<Creature>();
+		int[] blockedLocation  = { 50, 0 };
+		int[] blockingLeftLoc  = { 49, 0 };
+		int[] blockingRightLoc = { 51, 0 };
+		int[] blockingBelowLoc = { 50, 1 };
+		
+		// take an otherwise capable Nazgul
+		// and block it in against a wall
+		// with some other creatures - it should not
+		// be able to reproduce
+		Nazgul blocked = new Nazgul(blockedLocation, 9, 5, 5);
+		blocked.turnsSinceReproduction = 9;
+		
+		Hobbit blockingLeft   = new Hobbit(blockingLeftLoc, 8, 6, 6);
+		Nazgul blockingRight  = new Nazgul(blockingRightLoc, 7, 3, 8);
+		Hobbit blockingBottom = new Hobbit(blockingBelowLoc, 8, 2, 3);
+		
+		world.add(blocked);
+		world.add(blockingLeft);
+		world.add(blockingRight);
+		world.add(blockingBottom);
+		
+		blocked.refreshDirectSpaces(world);
+		blockingLeft.refreshDirectSpaces(world);
+		blockingRight.refreshDirectSpaces(world);
+		blockingBottom.refreshDirectSpaces(world);
+		
 		assertFalse(blocked.canReplicate());
 		
 	}

@@ -371,7 +371,6 @@ public class Nazgul extends Creature {
 
 	@Override
 	public void attack(Creature victim) {
-		System.out.println("A Nazgul is attempting to attack a Hobbit");
 		
 		Random rng = new Random();
 		
@@ -400,7 +399,6 @@ public class Nazgul extends Creature {
 
 	@Override
 	public Creature replicate() {
-		System.out.println("A Nazgul is attempting to replicate");
 		
 		int reproduceHere[] = { 0, 0 }; // filler location,
 		                                // should not be placed here
@@ -534,7 +532,17 @@ public class Nazgul extends Creature {
 
 	@Override
 	public boolean canReplicate() {
-		if(this.sustenance >= 2 && this.health >= 3 && this.turnsSinceReproduction >= 8) {
+		
+		// see if this Nazgul is against any wall
+		if(this.location[0] == 0 || this.location[0] == 99) {
+			return false;
+		}
+		else if(this.location[1] == 0 || this.location[1] == 99) {
+			return false;
+		}
+		
+		// see if this meets the minimum requirements to reproduce
+		else if(this.sustenance >= 2 && this.health >= 3 && this.turnsSinceReproduction >= 8) {
 			// can it move?
 			if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {
 				return true;

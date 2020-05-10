@@ -5,7 +5,8 @@
 
 // Final Project: CreatureAndHobbitTest
 // Purpose: to test both Creature and Hobbit, as
-// the Creature class is abstract
+// the Creature class is abstract and cannot have
+// its own direct objects
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +15,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.junit.jupiter.api.Test;
-
-
 
 class CreatureAndHobbitTest {
 	
@@ -159,8 +158,7 @@ class CreatureAndHobbitTest {
 		atLeftWall.move(Creature.direction.RIGHT);
 		assertTrue(Arrays.equals(left, atLeftWall.getLocation()));
 		
-		// just simply moving around
-		
+		// just simply moving around -
 		// moving left, up, right, down
 		int[] startingLocation  = { 50, 50 };
 		int[] expectedStepOne   = { 49, 50 };
@@ -307,7 +305,9 @@ class CreatureAndHobbitTest {
 		assertEquals(4, backpacker.getReach());
 		
 	}
-
+	
+	// test a variety of conditions on a Hobbit
+	// and make sure it is OK to have it reproduce
 	@Test
 	void testCanReplicate() {
 		
@@ -315,6 +315,7 @@ class CreatureAndHobbitTest {
 		int[] youngLocation  = { 8, 8 };
 		int[] hungryLocation = { 6, 6 };
 		int[] unwellLocation = { 4, 4 };
+		int[] deadLocation   = { 12, 12 };
 		ArrayList<Creature> world = new ArrayList<Creature>();
 		
 		Hobbit well = new Hobbit(wellLocation, 10, 3, 3); // the only Hobbit that
@@ -331,20 +332,55 @@ class CreatureAndHobbitTest {
 		unwell.sustenance = 1;
 		unwell.turnsSinceReproduction = 5;
 		
+		Hobbit dead = new Hobbit(deadLocation, 0, 1, 1);
+		dead.turnsSinceReproduction = 5;
+		
+		
 		world.add(well);
 		world.add(young);
 		world.add(unwell);
 		world.add(hungry);
+		world.add(dead);
 		
 		well.refreshDirectSpaces(world);
 		young.refreshDirectSpaces(world);
 		hungry.refreshDirectSpaces(world);
 		unwell.refreshDirectSpaces(world);
+		dead.refreshDirectSpaces(world);
 		
 		assertTrue(well.canReplicate());
 		assertFalse(young.canReplicate());
 		assertFalse(hungry.canReplicate());
 		assertFalse(unwell.canReplicate());
+		assertFalse(dead.canReplicate());
+		
+	}
+	
+	// will a Hobbit stop itself from replicating when
+	// pinned against a wall?
+	@Test
+	void testCanReplicateAgainstWall() {
+		int[] blockedLocation  = { 50, 0 };
+		int[] blockingLeftLoc  = { 49, 0 };
+		int[] blockingRightLoc = { 51, 0 };
+		int[] blockingBelowLoc = { 50, 1 };
+		
+		// make a Hobbit that would be otherwise be able to
+		// replicate
+		ArrayList<Creature> world = new ArrayList<Creature>();
+		Hobbit blocked = new Hobbit(blockedLocation, 12, 5, 5);
+		blocked.turnsSinceReproduction = 5;
+		
+		Hobbit blockingLeft  = new Hobbit(blockingLeftLoc, 7, 3, 4);
+		Nazgul blockingRight = new Nazgul(blockingRightLoc, 10, 3, 8);
+		Nazgul blockingBelow = new Nazgul(blockingBelowLoc, 23, 1, 5);
+		
+		world.add(blocked);
+		world.add(blockingLeft);
+		world.add(blockingRight);
+		world.add(blockingBelow);
+		
+		assertFalse(blocked.canReplicate());
 		
 	}
 
@@ -383,17 +419,22 @@ class CreatureAndHobbitTest {
 		tester.alterHealth(20);
 		assertEquals(0, tester.health);
 	}
-
+	
+	// see if it can find dead Creatures
 	@Test
 	void testIsDead() {
 		
-		int[] hobbitLocation = { 5, 5 };
-		int[] deadLocation   = { 3, 3 };
-		Hobbit alive = new Hobbit(hobbitLocation, 10, 5, 3);
-		Hobbit dead  = new Hobbit(deadLocation, 0, 3, 1);
+		int[] hobbitLocation     = { 5, 5 };
+		int[] deadHobbitLocation = { 3, 3 };
+		int[] deadNazgulLocation = { 7, 7 };
+		Hobbit alive      = new Hobbit(hobbitLocation, 10, 5, 3);
+		Hobbit deadHobbit = new Hobbit(deadHobbitLocation, 0, 3, 1);
+		Nazgul deadNazgul = new Nazgul(deadNazgulLocation, 0, 7, 5);
 		
 		assertFalse(alive.isDead());
-		assertTrue(dead.isDead());
+		assertTrue(deadHobbit.isDead());
+		assertTrue(deadNazgul.isDead());
+		
 	}
 
 	@Test
@@ -406,7 +447,9 @@ class CreatureAndHobbitTest {
 		tester.canCheckGround = false;
 		assertFalse(tester.getCheckGroundStatus());
 	}
-
+	
+	// gradually increase the blocked spaces on
+	// one Hobbit and see where it can and can't move
 	@Test
 	void testRefreshDirectSpaces() {
 		

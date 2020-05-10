@@ -78,8 +78,6 @@ public class Driver extends JPanel implements ActionListener {
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		
-		System.out.println("Begin minute " + ELAPSED);
-		
 		ELAPSED++;          // increment elapsed time
 		resetWindowTitle(); // reset the window title
 		
@@ -100,6 +98,7 @@ public class Driver extends JPanel implements ActionListener {
 			if(c.canCheckGround && session.doesSpaceHaveItem(c.getLocation())) {
 				Item item = session.getItem(c.getLocation());
 				c.getItem(item);
+				session.deleteItem(c.getLocation());
 			}
 			if(c.canReplicate()) {
 				Creature baby = c.replicate();
@@ -108,8 +107,6 @@ public class Driver extends JPanel implements ActionListener {
 			index++;
 		}
 		session.removeDeadCreatures();
-		
-		System.out.println("End minute " + ELAPSED);
 		
 		repaint(); // re-render the window
 		
@@ -130,7 +127,6 @@ public class Driver extends JPanel implements ActionListener {
 		Graphics2D g2d = (Graphics2D) g;
 		for(Creature c : occupants) {
 			int[] creatureLocation = c.getLocation();
-			//Color creatureColor = c.color();
 			
 			g2d.setColor(c.color());
 			
@@ -145,8 +141,7 @@ public class Driver extends JPanel implements ActionListener {
 	}
 	
 	public static void seedWorldWithCreatures(int hobbitsDesired, int nazgulDesired) {
-		// TODO modify so that it can add X
-		// Hobbit and Y Nazgul depending on the 
+		
 		Random rng = new Random();
 		
 		// make desired number of Hobbits
@@ -345,9 +340,6 @@ public class Driver extends JPanel implements ActionListener {
 	}
 	
 	public static void main(String[] args) {
-		
-		// TODO Make it so you can say how many Hobbits
-		// and Nazgul you want in your session
 		
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Welcome to Patrick Temple's version of \n\n" +
