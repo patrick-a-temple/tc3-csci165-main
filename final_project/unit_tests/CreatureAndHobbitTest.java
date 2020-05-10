@@ -315,6 +315,7 @@ class CreatureAndHobbitTest {
 		int[] youngLocation  = { 8, 8 };
 		int[] hungryLocation = { 6, 6 };
 		int[] unwellLocation = { 4, 4 };
+		ArrayList<Creature> world = new ArrayList<Creature>();
 		
 		Hobbit well = new Hobbit(wellLocation, 10, 3, 3); // the only Hobbit that
 		                                                  // can pass canReplicate()
@@ -329,6 +330,16 @@ class CreatureAndHobbitTest {
 		Hobbit unwell = new Hobbit(unwellLocation, 2, 4, 1);
 		unwell.sustenance = 1;
 		unwell.turnsSinceReproduction = 5;
+		
+		world.add(well);
+		world.add(young);
+		world.add(unwell);
+		world.add(hungry);
+		
+		well.refreshDirectSpaces(world);
+		young.refreshDirectSpaces(world);
+		hungry.refreshDirectSpaces(world);
+		unwell.refreshDirectSpaces(world);
 		
 		assertTrue(well.canReplicate());
 		assertFalse(young.canReplicate());

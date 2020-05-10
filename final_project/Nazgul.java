@@ -13,8 +13,6 @@ public class Nazgul extends Creature {
 	// move towards the Hobbit it is attacking.
 	int[] victimLocation;
 	
-	
-	
 	// constructors
 	public Nazgul() { super(); } // blank constructor
 	
@@ -317,7 +315,6 @@ public class Nazgul extends Creature {
 			
 			// if no other Creatures found, move randomly
 			if(friendCount == 0 || friendCount == 4 ) {
-				System.out.println("Nazgul moving in random direction");
 				moveRandomDirection();
 				return;
 			}
@@ -347,39 +344,26 @@ public class Nazgul extends Creature {
 	
 	@Override
 	public void move(direction d) {
-		System.out.println("A Nazgul is moving");
 		
 		if(d == direction.UP) {
 			// if at top edge of map do
 			// not allow the Nazgul to move
-			if(this.location[1] == 0) {
-				System.out.println("A Nazgul cannot walk through the north wall");
-			}
-			else {
+			if(this.location[1] != 0) {
 				this.location[1]--;
 			}
 		}
 		else if(d == direction.RIGHT) {
-			if(this.location[1] == 99) {
-				System.out.println("A Nazgul cannot walk through the east wall");
-			}
-			else {
+			if(this.location[1] != 99) {
 				this.location[0]++;
 			}
 		}
 		else if(d == direction.DOWN) {
-			if(this.location[1] == 99) {
-				System.out.println("A Nazgul cannot walk through the south wall");
-			}
-			else {
+			if(this.location[1] != 99) {
 				this.location[1]++;
 			}
 		}
 		else if(d == direction.LEFT) {
-			if(this.location[0] == 0) {
-				System.out.println("A Nazgul cannot walk through the west wall");
-			}
-			else {
+			if(this.location[0] != 0) {
 				this.location[0]--;
 			}
 		}

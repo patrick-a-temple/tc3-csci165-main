@@ -15,6 +15,7 @@
 // and creatures
 
 import java.util.Random;    // for random number generation
+import java.util.Scanner;
 import java.util.ArrayList; // for storing objects into arrays
 import java.util.Arrays;
 import java.util.Collections;
@@ -46,7 +47,7 @@ public class Driver extends JPanel implements ActionListener {
 	
 	private static ArrayList<Creature> occupants = new ArrayList<Creature>(); // for holding occupants
 	private static ArrayList<Item> items = new ArrayList<Item>();             // for holding items
-	Map session = new Map(occupants, items);
+	private static Map session = new Map(occupants, items);
 	
 	final Timer timer = new Timer(DELAY, this);
 	
@@ -143,36 +144,46 @@ public class Driver extends JPanel implements ActionListener {
 		window.setTitle("Hobbits Vs. Nazgul | Elapsed: " + ELAPSED + " min.");
 	}
 	
-	public static void seedWorldWithCreatures() {
+	public static void seedWorldWithCreatures(int hobbitsDesired, int nazgulDesired) {
 		// TODO modify so that it can add X
 		// Hobbit and Y Nazgul depending on the 
 		Random rng = new Random();
 		
+		// make desired number of Hobbits
 		
-		// fill the world with some Hobbits
-		for(int i = 0; i < 60; i++) {
+		for(int i = 0; i < hobbitsDesired; i++) {
 			
-			// assign random values for health, attack and defense
+			int[] hobbitLocation = { 0, 0 };
+			do {
+				hobbitLocation[0] = (Math.abs(rng.nextInt() % 100));
+				hobbitLocation[1] = (Math.abs(rng.nextInt() % 100));
+			} while(session.isSpaceOccupied(hobbitLocation));
+			
 			int healthStat  = Math.abs(rng.nextInt() % 9) + 6;
 			int attackStat  = Math.abs(rng.nextInt() % 9) + 1;
 			int defenseStat = Math.abs(rng.nextInt() % 9) + 1;
 			
-			// make a Hobbit or Nazgul with these random values
-			if(i <= 9) {
-				int[] hobbitLocation = { 49, (10 * i) + 5 };
-				
-				Hobbit temp = new Hobbit(hobbitLocation, healthStat, attackStat, defenseStat);
-				occupants.add(temp);
-				
-			}
-			else {
-				int[] nazgulLocation = { 51, ((2 * (i - 10))) + 1 };
-				
-				Nazgul temp = new Nazgul(nazgulLocation, healthStat, attackStat, defenseStat);
-				occupants.add(temp);
-				
-			}
+			Hobbit temp = new Hobbit(hobbitLocation, healthStat, attackStat, defenseStat);
+			occupants.add(temp);
 			
+		}
+		
+		// make desired number of Nazgul
+		
+		for(int i = 0; i < nazgulDesired; i++) {
+			
+			int[] nazgulLocation = { 0, 0 };
+			do {
+				nazgulLocation[0] = (Math.abs(rng.nextInt() % 100));
+				nazgulLocation[1] = (Math.abs(rng.nextInt() % 100));
+			} while(session.isSpaceOccupied(nazgulLocation));
+			
+			int healthStat  = Math.abs(rng.nextInt() % 9) + 6;
+			int attackStat  = Math.abs(rng.nextInt() % 9) + 1;
+			int defenseStat = Math.abs(rng.nextInt() % 9) + 1;
+			
+			Nazgul temp = new Nazgul(nazgulLocation, healthStat, attackStat, defenseStat);
+			occupants.add(temp);
 			
 		}
 	}
@@ -252,6 +263,83 @@ public class Driver extends JPanel implements ActionListener {
 			}
 		}
 		
+		for(int y = 20; y < 30; y++) {
+			for(int x = 0; x < 100; x++) {
+				int[] itemLocation = { x, y };
+				int itemEffectLevel = Math.abs(rng.nextInt() % 5) + 1;
+				int multiplierLevel = Math.abs(rng.nextInt() % 3) + 2;
+				if(x % 6 == 0) {
+					MagicalItem magicHealer = new MagicalItem(itemLocation, itemEffectLevel, 
+							                                  Item.itemType.HEALTH, multiplierLevel);
+					items.add(magicHealer);
+				}
+				else if(x % 6 == 1) {
+					MagicalItem magicAttack = new MagicalItem(itemLocation, itemEffectLevel, 
+							                                  Item.itemType.OFFENSE, multiplierLevel);
+					items.add(magicAttack);
+				}
+				else if(x % 6 == 2) {
+					MagicalItem magicDefense = new MagicalItem(itemLocation, itemEffectLevel,
+							                                   Item.itemType.DEFENSE, multiplierLevel);
+					items.add(magicDefense);
+				}
+				else if(x % 6 == 3) {
+					MagicalItem magicSightItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                     Item.itemType.SIGHT, multiplierLevel);
+					items.add(magicSightItem);
+				}
+				else if(x % 6 == 4) {
+					MagicalItem magicFoodItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                    Item.itemType.NOURISHMENT, multiplierLevel);
+					items.add(magicFoodItem);
+				}
+				else {
+					MagicalItem magicReachItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                     Item.itemType.REACH, multiplierLevel);
+					items.add(magicReachItem);
+				}
+			}
+		}
+		
+		// do the same thing as above with y = 70 to 79
+		for(int y = 70; y < 80; y++) {
+			for(int x = 0; x < 100; x++) {
+				int[] itemLocation = { x, y };
+				int itemEffectLevel = Math.abs(rng.nextInt() % 5) + 1;
+				int multiplierLevel = Math.abs(rng.nextInt() % 3) + 2;
+				if(x % 6 == 0) {
+					MagicalItem magicHealer = new MagicalItem(itemLocation, itemEffectLevel, 
+							                                  Item.itemType.HEALTH, multiplierLevel);
+					items.add(magicHealer);
+				}
+				else if(x % 6 == 1) {
+					MagicalItem magicAttack = new MagicalItem(itemLocation, itemEffectLevel, 
+							                                  Item.itemType.OFFENSE, multiplierLevel);
+					items.add(magicAttack);
+				}
+				else if(x % 6 == 2) {
+					MagicalItem magicDefense = new MagicalItem(itemLocation, itemEffectLevel,
+							                                   Item.itemType.DEFENSE, multiplierLevel);
+					items.add(magicDefense);
+				}
+				else if(x % 6 == 3) {
+					MagicalItem magicSightItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                     Item.itemType.SIGHT, multiplierLevel);
+					items.add(magicSightItem);
+				}
+				else if(x % 6 == 4) {
+					MagicalItem magicFoodItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                    Item.itemType.NOURISHMENT, multiplierLevel);
+					items.add(magicFoodItem);
+				}
+				else {
+					MagicalItem magicReachItem = new MagicalItem(itemLocation, itemEffectLevel,
+							                                     Item.itemType.REACH, multiplierLevel);
+					items.add(magicReachItem);
+				}
+			}
+		}
+		
 		// every fourth row will not get items
 		
 	}
@@ -261,10 +349,24 @@ public class Driver extends JPanel implements ActionListener {
 		// TODO Make it so you can say how many Hobbits
 		// and Nazgul you want in your session
 		
-		seedWorldWithCreatures();
+		Scanner reader = new Scanner(System.in);
+		System.out.println("Welcome to Patrick Temple's version of \n\n" +
+		                   "Hobbits vs. Nazgul\n");
+		
+		// get number of Hobbits to add in
+		System.out.print("Enter the number of Hobbits you want added to the map: ");
+		int hobbitsDesired = reader.nextInt();
+		System.out.print("Enter the number of Nazgul you want added to the map: ");
+		int nazgulDesired = reader.nextInt();
+		
+		
+		
+		seedWorldWithCreatures(hobbitsDesired, nazgulDesired);
 		seedWorldWithItems();
 		
-		System.out.println("Beginning session...");
+		System.out.println("Let the games begin! (opening a new window...)");
+		
+		reader.close();
 		
 		EventQueue.invokeLater(new Runnable() {
 			
