@@ -31,10 +31,14 @@ public class Nazgul extends Creature {
 		turnsSinceReproduction = 0;
 	}
 	
+	// set the location of the victim that it
+	// just attacked
 	private void setVictimLocation(int[] vLocation) {
 		this.victimLocation = vLocation;
 	}
 	
+	// after attacking a Hobbit, reset the sustenance
+	// back to 8
 	private void resetSustenance() {
 		this.sustenance = 8;
 	}
@@ -74,7 +78,7 @@ public class Nazgul extends Creature {
 		
 	}
 	
-	// move closer to a Hobbit that 
+	// move closer to a Hobbit that it just attacked
 	private void moveCloserToHobbit(ArrayList<Creature> neighborData) {
 		
 		boolean clearAbove = true;
@@ -87,15 +91,27 @@ public class Nazgul extends Creature {
 		int xDiff = 0;
 		int yDiff = 0;
 		
+		// if a certain option is out of the
+		// radius, do not allow it to go there
+		// in case there is a Hobbit the Nazgul can see
+		// with the neighborData radius restrictions
 		
+		// get the location above the Hobbit this Nazgul
+		// just attacked
 		int[] locationAboveVictim   = { this.victimLocation[0], this.victimLocation[1] - 1 };
 		yDiff = locationAboveVictim[1] - this.victimLocation[1];
 		xDiff = locationAboveVictim[0] - this.victimLocation[0];
 		
+		// if the location above the Hobbit is outside the
+		// Nazgul's radius, if so, do not plan on moving there
 		if(Math.abs(xDiff) > this.radiusSize || Math.abs(yDiff) > this.radiusSize) {
 			clearAbove = false;
 		}
 		
+		// the process is the relatively the same for
+		// the Hobbits right, bottom, and left sides
+		
+		// right:
 		int[] locationRightOfVictim = { this.victimLocation[0] + 1, this.victimLocation[1] };
 		yDiff = locationRightOfVictim[1] - this.victimLocation[1];
 		xDiff = locationRightOfVictim[0] - this.victimLocation[0];
@@ -104,6 +120,7 @@ public class Nazgul extends Creature {
 			clearRight = false;
 		}
 		
+		// below:
 		int[] locationBelowVictim   = { this.victimLocation[0], this.victimLocation[1] + 1 };
 		yDiff = locationBelowVictim[1] - this.victimLocation[1];
 		xDiff = locationBelowVictim[0] - this.victimLocation[0];
@@ -112,6 +129,7 @@ public class Nazgul extends Creature {
 			clearBelow = false;
 		}
 		
+		// left:
 		int[] locationLeftOfVictim  = { this.victimLocation[0] - 1, this.victimLocation[1] };
 		yDiff = locationLeftOfVictim[1] - this.victimLocation[1];
 		xDiff = locationLeftOfVictim[0] - this.victimLocation[0];
@@ -121,17 +139,13 @@ public class Nazgul extends Creature {
 		}
 		
 		
-		// if a certain option is out of the
-		// radius, do not allow it to go there
-		// in case there is a Hobbit the Nazgul can see
-		// with the neighborData radius restrictions
+		
 		
 		// for upper wall
 		
 		// if the victim Hobbit was next to a wall,
-		// do not allow it to try to move next to
+		// do not allow this Nazgul to try to move next to
 		// an invalid location
-		
 		
 		if(this.victimLocation[1] == 0) {
 			clearAbove = false;
@@ -182,11 +196,15 @@ public class Nazgul extends Creature {
 			
 		}
 		
+		// if this Hobbit is completely surrounded by
+		// other Creatures, do not allow this Nazgul to move
+		// to the side of the Hobbit
 		if(!clearAbove && !clearRight && !clearBelow && !clearLeft) {
 			System.out.println("A Nazgul could not move because the Hobbit it attacked was blocked");
 			return;
 		}
 		
+		// move on a side of the Hobbit
 		if(clearAbove) {
 			this.setLocation(locationAboveVictim);
 			return;
@@ -229,9 +247,13 @@ public class Nazgul extends Creature {
 			resetSustenance();
 			this.canCheckGround = false; // rule: cannot pick up any
 			                             // item after attacking
+			
 			// rule: Nazgul can move after attacking,
 			// and that's about to be handled right now -
-			// move close to that particular Hobbit
+			// move close to that particular Hobbit unless the
+			// Hobbit died in the attack, or it was already next to
+			// the Hobbit it attacked
+			
 			if(hobbitFound.isDead()) {
 				System.out.println("A Nazgul killed a Hobbit");
 			}
@@ -245,9 +267,12 @@ public class Nazgul extends Creature {
 			
 		}
 		
+		// else: look for other Hobbits to move towards
+		// (this is adapted from the Hobbit method, which
+		// Stephen W. helped me sort out)
 		else if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {
 			
-			// make flags for if there is a Hobbit or Nazgul nearby
+			// make flags for if there is a Nazgul nearby
 			boolean friendUp = false;
 			boolean friendRight = false;
 			boolean friendDown = false;
@@ -282,11 +307,15 @@ public class Nazgul extends Creature {
 				
 				// Creature found on left
 				if(xDiff < 0) {
+					// if there is a Nazgul note that there
+					// was one on the left
 					if(Nazgul.class.isInstance(c)) {
 						friendCount++;
 						friendLeft = true;
 					}
 				}
+				
+				// the process is similar for the other directions
 				
 				// Creature on the right
 				if(xDiff > 0) {
@@ -319,7 +348,7 @@ public class Nazgul extends Creature {
 				return;
 			}
 			
-			
+			// move towards a fellow Hobbit
 			if(canMoveUp && friendUp) {
 				move(direction.UP);
 			}
@@ -335,6 +364,7 @@ public class Nazgul extends Creature {
 			
 		}
 		
+		// the Nazgul cannot move
 		else {
 			System.out.println("A Nazgul is blocked in, it can't move");
 			this.canCheckGround = false;
@@ -342,6 +372,9 @@ public class Nazgul extends Creature {
 		
 	}
 	
+	// control the movements of a Hobbit -
+	// also ensure that under no circumstances
+	// it can move through walls like Hobbits can
 	@Override
 	public void move(direction d) {
 		
@@ -368,7 +401,8 @@ public class Nazgul extends Creature {
 			}
 		}
 	}
-
+	
+	// dictate the behaviors of attacking a Hobbit
 	@Override
 	public void attack(Creature victim) {
 		
@@ -376,7 +410,7 @@ public class Nazgul extends Creature {
 		
 		// "roll the dice" to see if the Nazgul gets
 		// a critcal hit, if so, deal twice the damage
-		// and ignore defense stat on Hobbit
+		// and ignore defense stat on the victim Hobbit
 		
 		int diceRoll = Math.abs(rng.nextInt() % 6) + 1;
 		int damage = 0;
@@ -386,6 +420,12 @@ public class Nazgul extends Creature {
 			damage = (2 * offense) - victim.getDefense();
 			victim.alterHealth(damage);
 		}
+		
+		// otherwise the formula for damage is this Nazgul's
+		// defense minus the victim's defense
+		
+		// if the defense is too low, it cannot attack
+		
 		else if(this.offense - victim.getDefense() <= 0) {
 			System.out.println("A Nazgul could not attack a Hobbit");
 		}
@@ -395,7 +435,8 @@ public class Nazgul extends Creature {
 		}
 		
 	}
-
+	
+	// replicate this Nazgul (run after canReplicate)
 	@Override
 	public Creature replicate() {
 		
@@ -437,7 +478,9 @@ public class Nazgul extends Creature {
 			this.health = 0;
 		}
 	}
-
+	
+	// control the colors that the Nazgul turns
+	// depending on sustenance
 	@Override
 	public Color color() {
 		if(this.sustenance >= 4) {
@@ -450,10 +493,11 @@ public class Nazgul extends Creature {
 			return Color.LIGHT_GRAY;
 		}
 	}
-
+	
+	// dictate how an item raises stats
 	@Override
 	public void getItem(Item collectedItem) {
-		System.out.println("A Nazgul is getting an item");
+		
 		Item.itemType ciType = collectedItem.getCurrentItemType();
 		int modRate = collectedItem.getModifyingRate();
 		if(ciType == Item.itemType.HEALTH) {
@@ -476,6 +520,7 @@ public class Nazgul extends Creature {
 		inventory.add(collectedItem);
 	}
 	
+	// look for Nazgul to attack
 	@Override
 	public Creature seekEnemy(ArrayList<Creature> neighborData) {
 		
@@ -528,7 +573,8 @@ public class Nazgul extends Creature {
 		
 		//return null; // nothing found: return null
 	}
-
+	
+	// define when a Nazgul can replicate
 	@Override
 	public boolean canReplicate() {
 		
@@ -541,6 +587,8 @@ public class Nazgul extends Creature {
 		}
 		
 		// see if this meets the minimum requirements to reproduce
+		// (sustenance 2 or higher, health 3 or higher, and at least
+		// eight turns since last reproducing)
 		else if(this.sustenance >= 2 && this.health >= 3 && this.turnsSinceReproduction >= 8) {
 			// can it move?
 			if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {

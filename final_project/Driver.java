@@ -47,11 +47,14 @@ public class Driver extends JPanel implements ActionListener {
 	
 	private static ArrayList<Creature> occupants = new ArrayList<Creature>(); // for holding occupants
 	private static ArrayList<Item> items = new ArrayList<Item>();             // for holding items
-	private static Map session = new Map(occupants, items);
+	private static Map session = new Map(occupants, items);                   // for holding both
+	                                                                          // the above ArrayLists
 	
-	final Timer timer = new Timer(DELAY, this);
+	final Timer timer = new Timer(DELAY, this); // for making the program interact
+	                                            // with the world/creatures, and then
+	                                            // waiting one second
 	
-	// constructor
+	// constructor that starts the drawing
 	public Driver() {
 		super();
 		initUI();
@@ -74,7 +77,8 @@ public class Driver extends JPanel implements ActionListener {
 		
 	}
 	
-	// where to put functions that change Creature state
+	// the engine of the program that can interact
+	// with all of the classes - runs every second
 	@Override
 	public void actionPerformed(final ActionEvent e) {
 		
@@ -91,34 +95,43 @@ public class Driver extends JPanel implements ActionListener {
 		int index = 0;
 		
 		while(index < occupants.size()) {
-			Creature c = occupants.get(index);
+			Creature c = occupants.get(index); // get the next creature
+			
+			// get the neighbor data for chooseAction
 			ArrayList<Creature> neighborData = session.findNeighbors(c.getLocation(), c.getRadiusSize());
-			c.chooseAction(neighborData);
-			c.stay();
+			c.chooseAction(neighborData); // let the Creature decide what to do
+			c.stay();                     // decrement sustenance and increment
+			                              // turns since reproduction
+			
+			// if there is an item, and the Creature is allowed
+			// to pick it up, give it to the Creature
 			if(c.getCheckGroundStatus() && session.doesSpaceHaveItem(c.getLocation())) {
 				Item item = session.getItem(c.getLocation());
 				c.getItem(item);
-				session.deleteItem(c.getLocation());
+				session.deleteItem(c.getLocation()); // delete off the map so another
+				                                     // Creature canot pick up the same item
 			}
+			
+			// if this Creature can replicate, allow it
+			// to do so, and add it to the map
 			if(c.canReplicate()) {
 				Creature baby = c.replicate();
 				occupants.add(baby);
 			}
 			index++;
 		}
-		session.removeDeadCreatures();
+		session.removeDeadCreatures(); // remove any dead Creatures from the map
 		
-		repaint(); // re-render the window
+		repaint();                     // re-render the window
 		
 	}
 	
-	
-	
+	// call painting functions
 	@Override
 	protected void paintComponent(Graphics g) {
 		
 		super.paintComponent(g);
-		redrawCreatures(g);
+		redrawCreatures(g);     // after each turn redraw the map
 		
 	}
 	
@@ -126,10 +139,11 @@ public class Driver extends JPanel implements ActionListener {
 		
 		Graphics2D g2d = (Graphics2D) g;
 		for(Creature c : occupants) {
+			// get the location of the Creature, the color it is
+			// supposed to be, and draw it on the map
 			int[] creatureLocation = c.getLocation();
 			
 			g2d.setColor(c.color());
-			
 			g2d.fillRect(creatureLocation[0] * 5, creatureLocation[1] * 5, 5, 5);
 		}
 		
@@ -140,6 +154,7 @@ public class Driver extends JPanel implements ActionListener {
 		window.setTitle("Hobbits Vs. Nazgul | Elapsed: " + ELAPSED + " min.");
 	}
 	
+	// add the desire number of Creatures to the Map
 	public static void seedWorldWithCreatures(int hobbitsDesired, int nazgulDesired) {
 		
 		Random rng = new Random();
@@ -149,21 +164,25 @@ public class Driver extends JPanel implements ActionListener {
 		for(int i = 0; i < hobbitsDesired; i++) {
 			
 			int[] hobbitLocation = { 0, 0 };
+			
+			// try to pick an unused location for each Creature
 			do {
 				hobbitLocation[0] = (Math.abs(rng.nextInt() % 100));
 				hobbitLocation[1] = (Math.abs(rng.nextInt() % 100));
 			} while(session.isSpaceOccupied(hobbitLocation));
 			
+			// randomize different health, attack, and defense levels
 			int healthStat  = Math.abs(rng.nextInt() % 9) + 6;
 			int attackStat  = Math.abs(rng.nextInt() % 9) + 1;
 			int defenseStat = Math.abs(rng.nextInt() % 9) + 1;
 			
+			// create and add the Hobbit
 			Hobbit temp = new Hobbit(hobbitLocation, healthStat, attackStat, defenseStat);
 			occupants.add(temp);
 			
 		}
 		
-		// make desired number of Nazgul
+		// make desired number of Nazgul - similar to above
 		
 		for(int i = 0; i < nazgulDesired; i++) {
 			
@@ -185,14 +204,11 @@ public class Driver extends JPanel implements ActionListener {
 	
 	public static void seedWorldWithItems() {
 		
-		// every fifth horizontal line (y = 0; y = 3 ...)
-		// add a health item or a nourishment item
-		// every fifth line will have magical items
-		
 		// save y = 20 to 29 and 70 to 79 for some MagicalItems
 		
 		Random rng = new Random();
 		
+		// fill world with health and nourishment items
 		for(int y = 0; y < 100; y += 5) {
 			if((y >= 70 && y < 80) || (y >= 20 && y < 30)) {
 				continue;
@@ -226,6 +242,7 @@ public class Driver extends JPanel implements ActionListener {
 			}
 		}
 		
+		// fill world with defensive items
 		for(int y = 2; y < 100; y += 5) {
 			if((y >= 70 && y < 80) || (y >= 20 && y < 30)) {
 				continue;
@@ -238,6 +255,7 @@ public class Driver extends JPanel implements ActionListener {
 			}
 		}
 		
+		// fill world with reach and sight items
 		for(int y = 3; y < 100; y += 5) {
 			if((y >= 70 && y < 80) || (y >= 20 && y < 30)) {
 				continue;
@@ -258,6 +276,7 @@ public class Driver extends JPanel implements ActionListener {
 			}
 		}
 		
+		// fill y = 20 to 29 with magical items
 		for(int y = 20; y < 30; y++) {
 			for(int x = 0; x < 100; x++) {
 				int[] itemLocation = { x, y };
@@ -339,20 +358,20 @@ public class Driver extends JPanel implements ActionListener {
 		
 	}
 	
+	// get things started
 	public static void main(String[] args) {
 		
 		Scanner reader = new Scanner(System.in);
 		System.out.println("Welcome to Patrick Temple's version of \n\n" +
 		                   "Hobbits vs. Nazgul\n");
 		
-		// get number of Hobbits to add in
+		// get number of Hobbits and Nazgul to add in
 		System.out.print("Enter the number of Hobbits you want added to the map: ");
 		int hobbitsDesired = reader.nextInt();
 		System.out.print("Enter the number of Nazgul you want added to the map: ");
 		int nazgulDesired = reader.nextInt();
 		
-		
-		
+		// call functions to add Creatures and Nazgul to the map
 		seedWorldWithCreatures(hobbitsDesired, nazgulDesired);
 		seedWorldWithItems();
 		
@@ -360,6 +379,7 @@ public class Driver extends JPanel implements ActionListener {
 		
 		reader.close();
 		
+		// start the game
 		EventQueue.invokeLater(new Runnable() {
 			
 			@Override

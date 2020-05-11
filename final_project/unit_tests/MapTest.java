@@ -17,13 +17,16 @@ class MapTest {
 		
 		// some locations for a Hobbit and a Nazgul
 		int[] hobbitLocation = { 5, 5 };
-		int[] itemLocation = { 7, 7 };
-		int[] nazgulLocation = { 10, 10 }; // should not be detected
+		int[] itemLocation = { 7, 7 };    // should not be detected as it is an item
+		int[] nazgulLocation = { 10, 10 };
 		
+		// make the items that will be on the map
 		Hobbit hobbit = new Hobbit(hobbitLocation, 5, 5, 5);
 		Nazgul nazgul = new Nazgul(nazgulLocation, 7, 7, 7);
 		MagicalItem superFood = new MagicalItem(itemLocation, 5, Item.itemType.NOURISHMENT, 2);
 		
+		// load the items into the ArrayLists and
+		// into a tester map
 		occupants.add(hobbit);
 		occupants.add(nazgul);
 		items.add(superFood);
@@ -44,12 +47,15 @@ class MapTest {
 		ArrayList<Item> items = new ArrayList<Item>();
 		
 		int[] itemLocation  = { 7, 7 };
-		int[] blankLocation = { 7, 0 };
+		int[] blankLocation = { 7, 0 }; // no item there
+		
 		Item coolItem = new Item(itemLocation, 3, Item.itemType.OFFENSE);
 		items.add(coolItem);
 		
 		Map session = new Map(occupants, items);
 		
+		// test to see if it can recognize
+		// which space has no item
 		assertTrue(session.doesSpaceHaveItem(itemLocation));
 		assertFalse(session.doesSpaceHaveItem(blankLocation));
 		
@@ -63,6 +69,8 @@ class MapTest {
 		ArrayList<Item> items = new ArrayList<Item>();
 		Random rng = new Random();
 		
+		// make some items that should add
+		// hide the real item better
 		for(int i = 0; i < 4; i++) {
 			int[] location = { (Math.abs(rng.nextInt() % 100)), (Math.abs(rng.nextInt() % 100)) };
 			Item temp = new Item(location, (Math.abs(rng.nextInt() % 10)), Item.itemType.SIGHT);
@@ -74,6 +82,7 @@ class MapTest {
 		items.add(realItem);
 		Map session = new Map(occupants, items);
 		
+		// get the real item
 		Item result = session.getItem(realItemLocation);
 		assertEquals(realItem, result);
 		
@@ -86,7 +95,9 @@ class MapTest {
 		assertNull(result);
 		
 	}
-
+	
+	// see if it can delete an item that
+	// was picked up
 	@Test
 	void testDeleteItem() {
 		
@@ -99,6 +110,7 @@ class MapTest {
 		
 		Map session = new Map(occupants, items);
 		
+		// items should be empty, test this
 		session.deleteItem(itemLocation);
 		assertTrue(items.isEmpty());
 		
@@ -196,14 +208,17 @@ class MapTest {
 		Map session = new Map(occupants, items);
 		
 		session.removeDeadCreatures();
-		assertFalse(occupants.size() == 10);
-		assertTrue(occupants.size() == 8);
+		assertFalse(occupants.size() == 10); // make sure the list of
+		                                     // creatures has changed in size
+		assertTrue(occupants.size() == 8);   // and only has the alive Creatures
 		
+		// the dead Creatures should be removed 
 		assertFalse(occupants.contains(deadHobbit));
 		assertFalse(occupants.contains(deadHobbit));
 		
 	}
 	
+	// see if removeDeadCreatures keeps live Creatures
 	@Test
 	void testRemoveDeadCreaturesButNoneAreDead() {
 		ArrayList<Creature> occupants = new ArrayList<Creature>();
@@ -211,6 +226,7 @@ class MapTest {
 		
 		Random rng = new Random();
 		
+		// make alive creatues
 		for(int i = 0; i < 4; i++) {
 			int[] location = { (Math.abs(rng.nextInt() % 100)), (Math.abs(rng.nextInt() % 100)) };
 			Hobbit temp = new Hobbit(location, (Math.abs(rng.nextInt() % 15)) + 1,
@@ -219,7 +235,7 @@ class MapTest {
 		}
 		
 		Map session = new Map(occupants, items);
-		session.removeDeadCreatures();
+		session.removeDeadCreatures(); // there should be none
 		
 		assertTrue(occupants.size() == 4);
 		

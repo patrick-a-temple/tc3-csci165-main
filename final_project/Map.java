@@ -4,7 +4,8 @@
 // 4 May 2020
 
 // Final Project: Map
-// Purpose: to hold the objects and the 
+// Purpose: to hold the Creatures and
+// items on the map
 
 // imported classes
 import java.util.ArrayList;
@@ -26,7 +27,8 @@ public class Map {
 		this.items = items;
 	}
 	
-	// see if a space is occupied by a Creature
+	// see if a space is occupied by a Creature,
+	// if so, return true
 	// (not an Item, that has its own function)
 	public boolean isSpaceOccupied(int[] location) {
 		
@@ -41,7 +43,8 @@ public class Map {
 		
 	}
 	
-	// see if a space has an item
+	// see if there is an item in a particular space,
+	// if so, return true
 	public boolean doesSpaceHaveItem(int[] location) {
 		
 		for(int i = 0; i < items.size(); i++) {
@@ -55,7 +58,8 @@ public class Map {
 		
 	}
 	
-	// get item from location
+	// get item from location, ideally after running
+	// doesSpaceHaveItem
 	public Item getItem(int[] location) {
 		
 		for(int i = 0; i < items.size(); i++) {
@@ -69,7 +73,8 @@ public class Map {
 		
 	}
 	
-	// delete item after it is collected
+	// delete item after it is collected using
+	// a location
 	public void deleteItem(int[] location) {
 		for(int i = 0; i < items.size(); i++) {
 			Item temp = items.get(i);
@@ -81,7 +86,7 @@ public class Map {
 		}
 	}
 	
-	// find neighbors in a certain radius
+	// find neighbors in a certain radius, based on a specific location
 	public ArrayList<Creature> findNeighbors(int[] location, int radius) {
 		
 		// found neighbors go here
@@ -110,7 +115,8 @@ public class Map {
 		
 	}
 	
-	// remove dead Creatures
+	// remove dead Creatures from the map by
+	// using Creature's isDead
 	public void removeDeadCreatures() {
 		
 		int index = 0;

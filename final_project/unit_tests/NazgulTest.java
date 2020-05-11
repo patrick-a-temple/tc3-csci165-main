@@ -17,7 +17,8 @@ import org.junit.jupiter.api.Test;
 class NazgulTest {
 	
 	// make sure a Nazgul goes somewhere else when it
-	// does not see any other Creature
+	// does not see any other Creature (ie. moving in
+	// a random direction
 	@Test
 	void testChooseActionEmptyArea() {
 		
@@ -58,13 +59,15 @@ class NazgulTest {
 		world.add(rightBlock);
 		world.add(leftBlock);
 		
-		tester.chooseAction(world);
+		tester.chooseAction(world); // combine into neighborData replacement
 		
+		// see if the Nazgul is still there
 		assertTrue(Arrays.equals(testerLocation, tester.getLocation()));
 		
 	}
 	
-	// see if a Nazgul moves toward a fellow Nazgul
+	// see if a Nazgul moves toward a fellow Nazgul on
+	// the left
 	@Test
 	void testChooseActionWithFriendOnLeft() {
 		
@@ -74,7 +77,7 @@ class NazgulTest {
 		
 		ArrayList<Creature> world = new ArrayList<Creature>();
 		Nazgul friend  = new Nazgul(friendLoc, 7, 4, 2);
-		Nazgul primary = new Nazgul(primaryLoc, 8, 6, 6);
+		Nazgul primary = new Nazgul(primaryLoc, 8, 6, 6); // main test subject
 		
 		world.add(friend);
 		world.add(primary);
@@ -200,6 +203,7 @@ class NazgulTest {
 		Hobbit victim = new Hobbit(victimLocation, 10, 5, 2);
 		Nazgul attacker = new Nazgul(nazgulLocation, 8, 6, 3);
 		attacker.attack(victim);
+		
 		// in case of critical hit, either 6 HP
 		// or 0 HP is an expected number
 		assertTrue(victim.health == 6 || victim.health == 0);
@@ -292,7 +296,7 @@ class NazgulTest {
 		Nazgul carrier = new Nazgul(carrierLocation, 9, 6, 6);
 		// default: radiusSize = 8, sustenance = 8
 		
-		// test behavioral 
+		// test behaviors 
 		carrier.getItem(healthItem);
 		assertEquals(12, carrier.health);
 		
@@ -342,6 +346,8 @@ class NazgulTest {
 		rightBlocker.refreshDirectSpaces(world);
 		blocked.refreshDirectSpaces(world);
 		
+		// add to a tester ArrayList of Creatures
+		// then test which ones can reproduce
 		world.add(healthy);
 		world.add(ill);
 		world.add(young);
@@ -356,6 +362,7 @@ class NazgulTest {
 		
 	}
 	
+	// make sure a Nazgul cannot replicate against a wall
 	@Test
 	void testCanReplicateAgainstWall() {
 		
@@ -386,11 +393,11 @@ class NazgulTest {
 		blockingRight.refreshDirectSpaces(world);
 		blockingBottom.refreshDirectSpaces(world);
 		
-		assertFalse(blocked.canReplicate());
+		assertFalse(blocked.canReplicate()); // test to see if it cannot replicate
 		
 	}
 	
-	// ensure seekEnemy returns null when it does
+	// ensure seekEnemy should return null when it does
 	// not find a Creature
 	@Test
 	void testSeekEnemyNoResult() {
@@ -406,7 +413,7 @@ class NazgulTest {
 	}
 	
 	// giving the Nazgul an unfamiliar Hobbit, let it
-	// attack the Hobbit
+	// find the Hobbit
 	@Test
 	void testSeekEnemyOneUnfamiliarResult() {
 		

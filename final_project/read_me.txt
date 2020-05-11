@@ -77,6 +77,7 @@ Give neighborhood data to Creature, which will respond in the following ways:
         If dead (> 0 HP) do not allow to move
 		Check area in this order: up, right, down, left.
 		If Hobbit directly within their radius of sight, attack:
+            If the Hobbit that this Nazgul attacked in the last turn is still in the same spot, default to that Hobbit, else, pick a random Hobbit from anywhere in the surrounding area.
             Calculate attack's effect on health: this Nazgul's attack minus the Hobbit's defense = the attack
             If attack effect is 0, draw random number (1-6), and if it's six, it's a critical hit which bypasses the Hobbit's defense and does double damage
             If possible, move to a space close to the Hobbit, unless that Hobbit died in that attack or if the Hobbit is already surrounded.
