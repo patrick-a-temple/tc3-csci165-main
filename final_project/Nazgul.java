@@ -376,8 +376,7 @@ public class Nazgul extends Creature {
 		
 		// "roll the dice" to see if the Nazgul gets
 		// a critcal hit, if so, deal twice the damage
-		
-		// rule: critical hits do not nullify a Hobbit's defense
+		// and ignore defense stat on Hobbit
 		
 		int diceRoll = Math.abs(rng.nextInt() % 6) + 1;
 		int damage = 0;

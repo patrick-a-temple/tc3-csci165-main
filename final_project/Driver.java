@@ -95,7 +95,7 @@ public class Driver extends JPanel implements ActionListener {
 			ArrayList<Creature> neighborData = session.findNeighbors(c.getLocation(), c.getRadiusSize());
 			c.chooseAction(neighborData);
 			c.stay();
-			if(c.canCheckGround && session.doesSpaceHaveItem(c.getLocation())) {
+			if(c.getCheckGroundStatus() && session.doesSpaceHaveItem(c.getLocation())) {
 				Item item = session.getItem(c.getLocation());
 				c.getItem(item);
 				session.deleteItem(c.getLocation());

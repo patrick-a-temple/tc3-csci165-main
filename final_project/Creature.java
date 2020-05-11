@@ -18,7 +18,8 @@ public abstract class Creature implements Comparable<Creature>{
 	
 	// class features
 	
-	protected enum direction { UP, RIGHT, DOWN, LEFT };
+	protected enum direction { UP, RIGHT, DOWN, LEFT }; // for telling move what way
+	                                                    // to go in a clean way
 	
 	// location based on a 100 * 100 map
 	// (actual window will be 500 * 500)
@@ -109,10 +110,12 @@ public abstract class Creature implements Comparable<Creature>{
 		return canCheckGround;
 	}
 	
+	// move in a random direction - this should ONLY
+	// be called if there are no friends or foes nearby
 	public void moveRandomDirection() {
 		
 		Random rng = new Random();
-		int roll = Math.abs(rng.nextInt() % 4) + 1;
+		int roll = Math.abs(rng.nextInt() % 3) + 1;
 		direction way = direction.UP; // will tell move() what way to go
 		if(roll == 1) {
 			way = direction.UP;

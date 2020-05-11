@@ -501,6 +501,15 @@ class CreatureAndHobbitTest {
 		assertEquals(-1, here.compareTo(more));
 		assertEquals(0, here.compareTo(copy));
 		
+		int[] left = { 0, 49 };
+		int[] right = { 0, 50 };
+		
+		// extra case test added: points right next to each other
+		Hobbit hobbitOnLeft = new Hobbit(left, 10, 4, 5);
+		Nazgul nazgulOnRight = new Nazgul(right, 20, 5, 4);
+		
+		assertEquals(1, nazgulOnRight.compareTo(hobbitOnLeft));
+		
 	}
 
 }
