@@ -16,14 +16,16 @@ import java.util.Random;
 
 public class Hobbit extends Creature {
 
-	// if needed class features go here
+	// class features
 	private int reach; // how far a Hobbit can reach out to
 	                   // attack a Nazgul (if a Hobbit has a higher
 	                   // reach than its radius, it still cannot attack
 	                   // outside its radius)
 	
+	// constructors
 	public Hobbit() { super(); } // blank constructor
 	
+	// overloaded 
 	public Hobbit(int[] location, int health, int offense, int defense) {
 		super(location, health, offense, defense);
 		this.sustenance = 6;
@@ -33,10 +35,10 @@ public class Hobbit extends Creature {
 	
 	// copy constructor for replicate()
 	private Hobbit(Hobbit parent, int[] location) {
-		super(location, 10, parent.offense, parent.defense); // off and def copy the parent
+		super(location, 10, parent.offense, parent.defense); // off and def copied from the parent
 		this.sustenance = 7;
 		this.radiusSize = parent.radiusSize; // copy the radius size and
-		this.reach = parent.reach; // reach from the parent
+		this.reach = parent.reach;           // reach from the parent
 		this.turnsSinceReproduction = 0;
 	}
 	
@@ -64,17 +66,17 @@ public class Hobbit extends Creature {
 		// so it knows what ways it can and cannot go
 		refreshDirectSpaces(neighborData);
 		
-		// if enemy nearby call attack()
-		
+		// look for a Nazgul to attack
 		Creature firstEnemyFound = seekEnemy(neighborData);
-
+		
+		// if enemy nearby call attack()
 		if(firstEnemyFound != null) {
 			attack(firstEnemyFound);
 			this.canCheckGround = false; // rule: if any Creature attacks,
 			                             // it cannot pick up an item
 			// rule: Hobbits cannot move after attacking
 		}
-
+		
 		// if the Hobbit can move at all
 		else if(canMoveUp || canMoveRight || canMoveDown || canMoveLeft) {
 			// make flags for if there is a Hobbit or Nazgul nearby
@@ -92,12 +94,11 @@ public class Hobbit extends Creature {
 			                     // Hobbit is surrounded by
 			int friendCount = 0; // for holding the number of
 			                     // fellow Hobbits are nearby
-
+			
 			for(Creature c : neighborData) {
 				int[] tempLocation = c.getLocation(); // holds location of current Nazgul
 				
 				// skip if this Hobbit finds itself
-
 				if(Arrays.equals(this.location, tempLocation)) {
 					continue;
 				}
@@ -106,26 +107,34 @@ public class Hobbit extends Creature {
 				int xDiff = tempLocation[0] - this.location[0];
 				int yDiff = tempLocation[1] - this.location[1];
 				
+				// move on if outside of radius
 				int xTravel = Math.abs(xDiff);
 				int yTravel = Math.abs(yDiff);
 				
-				// move on if outside of radius
 				if(xTravel > this.radiusSize || yTravel > this.radiusSize) {
 					continue;
 				}
 				
 				// if there is a Creature to the left
 				if(xDiff < 0) {
+					// if there is a Nazgul found
 					if(Nazgul.class.isInstance(c)) {
-						foeCount++;
-						foeLeft = true;
+						foeCount++;     // note the number of times a
+						                // Nazgul was seen
+						foeLeft = true; // note that there was a Nazgul
+						                // on the left side
 						break;
 					}
 					if(Hobbit.class.isInstance(c)) {
-						friendCount++;
-						friendLeft = true;
+						friendCount++;     // note how many times there
+						                   // are fellow Hobbits nearby
+						friendLeft = true; // note that there is a Hobbit
+						                   // on the left
 					}
 				}
+				
+				// the below versions of this indicate Hobbits
+				// and Nazgul in other directions
 				
 				// if there is a Creature to the right
 				if(xDiff > 0) {
@@ -168,13 +177,15 @@ public class Hobbit extends Creature {
 			}
 			
 			// if a Hobbit does not see any other Creature,
-			// or if it sees Nazgul in all directions, pick a random direction
+			// or if it sees Nazgul in all directions, move
+			// in a random direction
 			if((friendCount == 0 && foeCount == 0) || foeCount == 4) {
 				moveRandomDirection();
 				return;
 			}
 			
-			// if a Hobbit has a Nazgul directly behind it
+			// if a Hobbit has a Nazgul directly behind it,
+			// go the opposite way
 			if(foeCount > 0) {
 				if(canMoveDown && foeUp) {
 					move(direction.DOWN);
@@ -208,11 +219,16 @@ public class Hobbit extends Creature {
 			
 		} // end else if(can move in at least one direction)
 		
+		// Hobbit cannot move in any direction at all:
+		// do not allow it to collect an item of the ground
 		else {
 			this.canCheckGround = false;
 		}
 	}
 	
+	// trigger the movements of the Hobbit
+	// (rule: OK for only a Hobbit to cross to
+	// the other side of the walls)
 	@Override
 	public void move(direction d) {
 		
@@ -265,22 +281,30 @@ public class Hobbit extends Creature {
 		
 	}
 	
-
+	// define how a Hobbit attacks a Nazgul
 	@Override
 	public void attack(Creature victim) {
 
-		Random rng = new Random();
+		Random rng = new Random(); // for random number generation
+		int damage = 0;            // for holding the damage that
+		                           // this Hobbit has dealt to the
+		                           // other cre
 
 		// "roll the dice" for a critical hit
 		// if it's a 6, if so, deal double damage and
 		// ignore the Nazgul's defenses
 		int diceRoll = Math.abs(rng.nextInt() % 6) + 1;
-		int damage = 0;
+		
 		if(diceRoll == 6) {
 			System.out.println("A Hobbit just landed a CRITICAL HIT on a Nazgul!!");
 			damage = 2 * offense;
-			victim.alterHealth(damage); // deal twice the damage to the victim
+			victim.alterHealth(damage);
 		}
+		
+		// otherwise, the damage formula is this Hobbit's
+		// attack, less the victim's defense
+		// if the victim has too high a defense, it cannot
+		// attack the victim
 		else if(this.offense - victim.getDefense() <= 0) {
 			System.out.println("A Hobbit could not attack a Nazgul (too low attack)");
 		}
@@ -319,9 +343,9 @@ public class Hobbit extends Creature {
 		Hobbit baby = new Hobbit(this, reproduceHere); // call the copy constructor using this
 		                                               // Hobbit as the "parent"/"copied" Hobbit
 		
-		this.health--;
-		this.turnsSinceReproduction = 0;
-		return baby;
+		this.health--;                   // decrement the health of this Hobbit
+		this.turnsSinceReproduction = 0; // and reset the reproduction counter
+		return baby;                     // return the baby
 	}
 	
 	// post turn decrementation of hunger
@@ -340,6 +364,8 @@ public class Hobbit extends Creature {
 		}
 	}
 	
+	// change the color of the Hobbit based on
+	// its sustenance level
 	@Override
 	public Color color() {
 		if(this.sustenance >= 4) {
@@ -353,10 +379,16 @@ public class Hobbit extends Creature {
 		}
 	}
 	
+	// determine behaviors of Hobbits when they
+	// pick up items
 	@Override
 	public void getItem(Item collectedItem) {
+		
+		// get the details from the item
 		Item.itemType ciType = collectedItem.getCurrentItemType();
 		int modRate = collectedItem.getModifyingRate();
+		
+		// add the item levels into the the correct stat
 		if(ciType == Item.itemType.HEALTH) {
 			this.health += modRate;
 		}
@@ -371,12 +403,15 @@ public class Hobbit extends Creature {
 		}
 		else if(ciType == Item.itemType.NOURISHMENT) {
 			this.sustenance += modRate;
-			this.health += 3;
+			this.health += 3; // bonus: eating food increases some health
 		}
 		else if(ciType == Item.itemType.REACH) {
 			this.reach += modRate;
 		}
+		
+		// add into inventory
 		inventory.add(collectedItem);
+		
 	}
 	
 	@Override
@@ -400,7 +435,8 @@ public class Hobbit extends Creature {
 			
 			if(xDiff <= reach && yDiff <= reach && Nazgul.class.isInstance(c)) {
 				return c; // if there is a Creature that this
-				          // Hobbit can reach, return it
+				          // Hobbit can reach, return it so
+				          // it can attack it
 			}
 			
 		}

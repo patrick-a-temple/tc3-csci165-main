@@ -52,6 +52,9 @@ class CreatureAndHobbitTest {
 	@Test
 	void testChooseActionDangerFromRight() {
 		
+		// result: the Hobbit should move left in
+		// response to the Nazgul
+		
 		int[] hobbitLocation = { 9, 9 };
 		int[] nazgulLocation = { 11, 9 };
 		int[] expectedMovement = { 8, 9 };
@@ -78,6 +81,9 @@ class CreatureAndHobbitTest {
 	@Test
 	void testChooseActionDangerFromBelow() {
 		
+		// result: see that the Hobbit will move up
+		// in response to a Nazgul below
+		
 		int[] hobbitLocation = { 9, 9 };
 		int[] nazgulLocation = { 9, 11 };
 		int[] expectedMovement = { 9, 8 };
@@ -103,6 +109,8 @@ class CreatureAndHobbitTest {
 	
 	@Test
 	void testChooseActionDangerFromLeft() {
+		
+		// result: the Hobbit should move to the right
 		
 		int[] hobbitLocation = { 9, 9 };
 		int[] nazgulLocation = { 7, 9 };
@@ -183,6 +191,8 @@ class CreatureAndHobbitTest {
 	@Test
 	void testAttack() {
 		
+		// test the results of the attack function
+		
 		ArrayList<Creature> world = new ArrayList<Creature>();
 		
 		int[] hobbitLocation = { 10, 10 };
@@ -224,24 +234,33 @@ class CreatureAndHobbitTest {
 	@Test
 	void testStay() {
 		
+		// result: depending on the Hobbit's situation,
+		// see how the stats of the Hobbits change
+		
 		int[] firstLocation = { 1, 1 };
 		int[] secondLocation = { 2, 2 };
 		int[] thirdLocation  = { 3, 3 };
 		
+		// a healthy Hobbit
 		Hobbit healthy = new Hobbit(firstLocation, 10, 3, 4);
 		healthy.sustenance = 6;
 		healthy.turnsSinceReproduction = 1;
 		healthy.stay();
+		
+		// test that reproduction count is incremented up,
+		// the sustenance went down, and the health has not
+		// went down
 		assertEquals(2, healthy.turnsSinceReproduction);
 		assertEquals(5, healthy.sustenance);
 		assertEquals(10, healthy.health);
 		
-		
+		// do the same with two hungrier Hobbits
 		Hobbit starving = new Hobbit(secondLocation, 6, 4, 2);
 		starving.sustenance = 0;
 		starving.stay();
 		assertEquals(-1, starving.sustenance);
 		assertEquals(3, starving.health);
+		
 		
 		Hobbit direlyFamished = new Hobbit(thirdLocation, 8, 9, 4);
 		direlyFamished.sustenance = -3;
@@ -253,6 +272,9 @@ class CreatureAndHobbitTest {
 
 	@Test
 	void testColor() {
+		
+		// results: see if the colors are correct for
+		// the respective situations
 		
 		int[] firstLocation = { 1, 1 };
 		int[] secondLocation = { 2, 2 };
@@ -273,6 +295,9 @@ class CreatureAndHobbitTest {
 
 	@Test
 	void testGetItem() {
+		
+		// result: see if the Hobbit adds the correct values
+		// into its stats
 		
 		int[] filler = { 0, 0 };
 		int[] hobbitLocation = { 9, 9 };
@@ -387,6 +412,8 @@ class CreatureAndHobbitTest {
 	@Test
 	void testSeekEnemy() {
 		
+		// result: the Hobbit should see the Nazgul
+		
 		int[] hobbitLocation = { 5, 5 };
 		int[] nazgulLocation = { 4, 5 };
 		ArrayList<Creature> world = new ArrayList<Creature>();
@@ -408,6 +435,9 @@ class CreatureAndHobbitTest {
 	@Test
 	void testAlterHealth() {
 		
+		// result: see if Creatures can alter
+		// their health correctly
+		
 		int[] hobbitLocation = { 5, 5 };
 		
 		Hobbit tester = new Hobbit(hobbitLocation, 10, 5, 3);
@@ -423,6 +453,8 @@ class CreatureAndHobbitTest {
 	// see if it can find dead Creatures
 	@Test
 	void testIsDead() {
+		
+		// result: two Creatures are dead
 		
 		int[] hobbitLocation     = { 5, 5 };
 		int[] deadHobbitLocation = { 3, 3 };
@@ -442,6 +474,8 @@ class CreatureAndHobbitTest {
 		
 		int[] hobbitLocation = { 5, 5 };
 		Hobbit tester = new Hobbit(hobbitLocation, 10, 5, 3);
+		// canCheckGround should automatically
+		// be true
 		
 		assertTrue(tester.getCheckGroundStatus());
 		tester.canCheckGround = false;
@@ -484,7 +518,8 @@ class CreatureAndHobbitTest {
 		
 		
 	}
-
+	
+	// test the behaviors of compareTo
 	@Test
 	void testCompareTo() {
 		

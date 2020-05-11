@@ -139,11 +139,15 @@ public abstract class Creature implements Comparable<Creature>{
 	// up, right, down, left
 	public void refreshDirectSpaces(ArrayList<Creature> neighborData) {
 		
+		// set each to true unless it meets the
+		// criteria for a space being blocked
 		this.canMoveUp = true;
 		this.canMoveRight = true;
 		this.canMoveDown = true;
 		this.canMoveLeft = true;
 		
+		// calculate the locations of spaces that
+		// are one step away in non-diagonal directions
 		int[] locationUp    = { this.location[0], (this.location[1] - 1) };
 		int[] locationRight = { (this.location[0] + 1), this.location[1] };
 		int[] locationDown  = { this.location[0], (this.location[1] + 1) };
@@ -151,7 +155,8 @@ public abstract class Creature implements Comparable<Creature>{
 		
 		for(Creature c : neighborData) {
 			
-			// fluke scenerio response: skip this Creature
+			// skips if the neighborData contained this
+			// Creature's location
 			if(Arrays.equals(this.location, c.getLocation())) {
 				continue;
 			}
@@ -190,7 +195,7 @@ public abstract class Creature implements Comparable<Creature>{
 	
 	public abstract void attack(Creature victim);
 	
-	public abstract Creature replicate(); // needs neighborhood data
+	public abstract Creature replicate();
 	
 	public abstract void stay();
 	

@@ -36,6 +36,7 @@ If a Nazgul does not see a Hobbit, they will approach a fellow Nazgul one step a
 Nazgul can only obtain sustenance from attacking Hobbits, and cannot "eat"/use nourishment items. Nazgul cannot use reach items, in addition. They can still collect them, however. Let's just say this makes it harder for Hobbits to eat as a side effect.
 Hobbits are the exact reverse: they must eat (read: collect nourishment items) to regain sustenance, and they can obtain and reap the benefits of reach items.
 If any creature has no other surrounding creatures, it will draw a random number to decide what direction it will move.
+If a Hobbit has a sustenance equal or less than zero, but no less than -2 sustenance, remove 3 health from this Hobbit each turn it has sustenance this low. If lower than -2, remove 5 health instead.
 
 
 
